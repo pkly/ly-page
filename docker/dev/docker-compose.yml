@@ -1,0 +1,24 @@
+version: "3"
+services:
+
+  lypage_php_dev:
+    container_name: lypage_php_dev
+    build:
+      context: ./php
+    volumes:
+      - ../../:/var/www
+      - ./php/ini/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./php/ini/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      - ./php/conf/php-fpm-custom.conf:/usr/local/etc/php-fpm.d/zz-php-fpm-custom.conf:ro
+
+  lypage_nginx:
+    container_name: lypage_nginx
+    image: nginx:alpine
+    volumes:
+      - ../../:/var/www
+      - ./nginx/dev.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites:/etc/nginx/sites-available
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "80:80"
