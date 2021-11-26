@@ -28,7 +28,7 @@ class MascotService
 
     public function getDirectories(): array
     {
-        return $this->cache->get(self::TAG.'.mascots.full.directories', function (ItemInterface $item) {
+        return $this->cache->get(self::TAG.'.mascots.directories', function (ItemInterface $item) {
             $item->tag(self::TAG)
                 ->expiresAfter(1);
 
@@ -47,12 +47,17 @@ class MascotService
 
     private function loadMascots(): array
     {
-        return $this->cache->get(self::TAG.'.mascots.full', function (ItemInterface $item) {
+        return $this->cache->get(self::TAG.'.mascots', function (ItemInterface $item) {
             $item->tag(self::TAG)
                 ->expiresAfter(15);
 
             try {
-                return iterator_to_array((new Finder())->in(rtrim($this->MASCOT_PATH, '/\\').DIRECTORY_SEPARATOR.'*')->files());
+                return array_values(
+                    array_map(
+                        fn (SplFileInfo $f) => $f->getRelativePathname(),
+                        iterator_to_array((new Finder())->in(rtrim($this->MASCOT_PATH, '/\\').DIRECTORY_SEPARATOR.'*')->files())
+                    )
+                );
             } catch (DirectoryNotFoundException) {
                 return [];
             }
