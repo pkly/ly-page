@@ -1,0 +1,19 @@
+{% macro card(title, subtitle, links) %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>{{ title|raw }}</h5>
+            <div class="card-subtitle mb-2">{{ subtitle|raw }}</div>
+            {% for k, v in links %}
+                <a href="{{ k }}" rel="noreferrer noopener" class="btn btn-outline-info btn-sm">{{ v }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro if_not_link(route, text) %}
+    {% if app.request.attributes.get('_route') != route %}
+        <a href="{{ path(route) }}">
+            {{ text }}
+        </a>
+    {% endif %}
+{% endmacro %}

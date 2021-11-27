@@ -1,0 +1,22 @@
+{
+  "name": "ly-page",
+  "version": "1.0.0",
+  "description": "Required javascript stuff for ly-page",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkly/ly-page.git"
+  },
+  "scripts": {
+    "index:scss": "sass public/assets/scss/main.scss public/assets/css/main.css"
+  },
+  "author": "pkly",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pkly/ly-page/issues"
+  },
+  "homepage": "https://github.com/pkly/ly-page#readme",
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "sass": "^1.43.5"
+  }
+}

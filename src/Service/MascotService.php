@@ -21,8 +21,6 @@ class MascotService
     public function getMascot(
         array $paths = []
     ): SplFileInfo|null {
-        dump($this->loadMascots());
-
         return null;
     }
 

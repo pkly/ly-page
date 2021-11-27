@@ -6,7 +6,8 @@ services:
     build:
       context: ./php
     environment:
-      - MASCOT_PATH=${MASCOT_PATH:-/var/www/default-mascots}
+      - MASCOT_PATH=${MASCOT_PATH:-%kernel.project_path%/empty}
+      - ADDITIONAL_TEMPLATE_PATH=${ADDITIONAL_TEMPLATE_PATH:-%kernel.project_path%/empty}
     volumes:
       - ../../:/var/www
       - ./php/ini/custom.ini:/usr/local/etc/php/conf.d/custom.ini

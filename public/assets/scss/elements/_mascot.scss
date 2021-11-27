@@ -1,0 +1,16 @@
+.mascot-container {
+  position: relative;
+  margin-bottom: calc(-1.5rem - 20px);
+
+  .mascot {
+    object-fit: contain;
+    object-position: bottom right;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 3rem - 50px);
+  }
+
+  .video-mascot {
+    margin-bottom: calc(1.5rem + 20px);
+  }
+}

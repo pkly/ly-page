@@ -2,21 +2,30 @@
 
 namespace App\Controller;
 
+use App\Enum\SessionOptions;
 use App\Service\MascotService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use App\Service\SplashTitleService;
+use App\Traits\SessionTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
+    use SessionTrait;
+
     #[Route("/")]
-    #[Template("base.html.twig")]
     public function index(
-        MascotService $mascotService
-    ): array {
-        dump($mascotService);
-        dump($mascotService->getMascot());
-        dump($mascotService->getDirectories());
-        return [];
+        string $BASE_TEMPLATE,
+        MascotService $mascotService,
+        SplashTitleService $splashTitleService
+    ): Response {
+        return $this->render(
+            $BASE_TEMPLATE,
+            [
+                'body_title' => $splashTitleService->getTitle(),
+                'mascot' => $mascotService->getMascot($this->getSession()?->get(SessionOptions::MASCOT_PATHS->value, [])),
+            ]
+        );
     }
 }
