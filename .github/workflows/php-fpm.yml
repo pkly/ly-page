@@ -5,12 +5,11 @@ on: [push]
 env:
   IMAGE_NAME: lypage-php-fpm
   DOCKERFILE_PATH: docker/build/php/Dockerfile
-  SEARCH_QUOTE: php-fpm-build
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, $SEARCH_QUOTE)"
+    if: "contains(github.event.head_commit.message, 'php-fpm-build')"
 
     steps:
       - uses: actions/checkout@v2
