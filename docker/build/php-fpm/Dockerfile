@@ -19,7 +19,7 @@ RUN docker-php-ext-install opcache
 # install composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-COPY docker/build/php/ini/custom.ini /usr/local/etc/php/conf.d/custom.ini
+COPY docker/build/php-fpm/ini/custom.ini /usr/local/etc/php/conf.d/custom.ini
 COPY docker/dev/php/ini/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY docker/dev/php/conf/php-fpm-custom.conf /usr/local/etc/php-fpm.d/zz-php-fpm-custom.conf
 
