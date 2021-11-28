@@ -1,6 +1,6 @@
 FROM nginx:alpine
 
-COPY docker/dev/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/prod/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/dev/nginx/sites/dev.conf /etc/nginx/sites-available/sites.conf
 COPY docker/dev/nginx/dev.conf /etc/nginx/nginx.conf
 
