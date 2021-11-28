@@ -20,6 +20,8 @@ services:
     volumes:
       - lypage_shared_vol:/var/www/public:ro
       - ./logs/nginx:/var/log/nginx
+    ports:
+      - "${WEBSITE_PORT:-80}:80"
 
   lypage_cron_prod:
     container_name: lypage_cron_prod
