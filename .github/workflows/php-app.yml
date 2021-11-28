@@ -1,18 +1,28 @@
-name: Build php-fpm
+name: Build php-app
 
 on: [push]
 
 env:
-  IMAGE_NAME: lypage-php-fpm
-  DOCKERFILE_PATH: docker/build/php-fpm/Dockerfile
+  IMAGE_NAME: lypage-php-app
+  DOCKERFILE_PATH: docker/build/php-app/Dockerfile
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, 'php-fpm-build')"
+    if: "contains(github.event.head_commit.message, 'php-app-build')"
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - uses: php-actions/composer@v5
+        with:
+          php_version: 8.1
 
       - name: Build image
         run: docker build --build-arg=COMMIT=$(git rev-parse --short HEAD) . --file $DOCKERFILE_PATH --tag $IMAGE_NAME

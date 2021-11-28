@@ -23,10 +23,6 @@ COPY docker/build/php/ini/custom.ini /usr/local/etc/php/conf.d/custom.ini
 COPY docker/dev/php/ini/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY docker/dev/php/conf/php-fpm-custom.conf /usr/local/etc/php-fpm.d/zz-php-fpm-custom.conf
 
-COPY . /var/www
-
-RUN rm -rf /var/www/docker
-
 WORKDIR /var/www
 CMD php-fpm
 EXPOSE 9000

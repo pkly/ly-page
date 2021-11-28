@@ -1,24 +1,18 @@
 version: "3"
 
-# shared volume for nginx and php
-volumes:
-  lypage_shared_vol:
-
 services:
   lypage_php_prod:
     container_name: lypage_php_prod
-    image: ghcr.io/pkly/ly-page/lypage-php-fpm:latest
+    image: ghcr.io/pkly/ly-page/lypage-php-app:latest
     environment:
       - MASCOT_PATH=${MASCOT_PATH:-%kernel.project_path%/empty}
       - ADDITIONAL_TEMPLATE_PATH=${ADDITIONAL_TEMPLATE_PATH:-%kernel.project_path%/empty}
-    volumes:
-      - lypage_shared_vol:/var/www/public
+      - APP_ENV=prod
 
   lypage_nginx_prod:
     container_name: lypage_nginx_prod
     image: ghcr.io/pkly/ly-page/lypage-nginx:latest
     volumes:
-      - lypage_shared_vol:/var/www/public:ro
       - ./logs/nginx:/var/log/nginx
     ports:
       - "${WEBSITE_PORT:-80}:80"
