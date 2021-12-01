@@ -17,5 +17,8 @@ COPY docker/build/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/dev/nginx/sites/sites.conf /etc/nginx/sites-available/sites.conf
 COPY docker/dev/nginx/dev.conf /etc/nginx/nginx.conf
 
-ENTRYPOINT php-fpm && nginx -g deamon on; && /sbin/tini -- /usr/sbin/crond -f
+COPY docker/build/docker-app/docker-entrypoint.sh /var/www/entrypoint.sh
+RUN chmod +x /var/www/entrypoint.sh
+
+ENTRYPOINT /var/www/entrypoint.sh
 EXPOSE 80
