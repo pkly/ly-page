@@ -3,7 +3,7 @@ name: Build app into docker image
 on: [push]
 
 env:
-  IMAGE_NAME: lypage-compose
+  IMAGE_NAME: lypage-app
   DOCKERFILE_PATH: docker/build/docker-app/Dockerfile
 
 jobs:
@@ -13,6 +13,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - uses: php-actions/composer@v5
+        with:
+          php_version: 8.1
 
       - name: Build image
         run: docker build --build-arg=COMMIT=$(git rev-parse --short HEAD) . --file $DOCKERFILE_PATH --tag $IMAGE_NAME
