@@ -2,7 +2,7 @@
 
 set -m
 
-php-fpm &
+/usr/sbin/crond &
 nginx -g deamon on;
 
-/sbin/tini -- /usr/sbin/crond -f
+php-fpm
