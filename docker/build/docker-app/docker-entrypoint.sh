@@ -197,12 +197,9 @@ docker_setup_env() {
 pg_setup_hba_conf() {
 	# default authentication method is md5 on versions before 14
 	# https://www.postgresql.org/about/news/postgresql-14-released-2318/
-	if [ "$1" = 'postgres' ]; then
-		shift
-	fi
 	local auth
 	# check the default/configured encryption and use that as the auth method
-	auth="$(postgres -C password_encryption "$@")"
+	auth="md5"
 	# postgres 9 only reports "on" and not "md5"
 	if [ "$auth" = 'on' ]; then
 		auth='md5'
@@ -221,17 +218,13 @@ pg_setup_hba_conf() {
 # start socket-only postgresql server for setting up or running scripts
 # all arguments will be passed along as arguments to `postgres` (via pg_ctl)
 docker_temp_server_start() {
-	if [ "$1" = 'postgres' ]; then
-		shift
-	fi
-
 	# internal start of server in order to allow setup using psql client
 	# does not listen on external TCP/IP and waits until start finishes
-	set -- "$@" -c listen_addresses='' -p "${PGPORT:-5432}"
+	su postgres -c postgres -c listen_addresses='' -p "${PGPORT:-5432}" &
 
 	PGUSER="${PGUSER:-$POSTGRES_USER}" \
 	pg_ctl -D "$PGDATA" \
-		-o "$(printf '%q ' "$@")" \
+		-o postgres \
 		-w start
 }
 
@@ -242,50 +235,38 @@ docker_temp_server_stop() {
 }
 
 init_postgres() {
-	# if first arg looks like a flag, assume we want to run postgres server
-	if [ "${1:0:1}" = '-' ]; then
-		set -- postgres "$@"
-	fi
+  docker_setup_env
+  # setup data directories and permissions (when run as root)
+  docker_create_db_directories
+  # only run initialization on an empty data directory
+  if [ -z "$DATABASE_ALREADY_EXISTS" ]; then
+    docker_verify_minimum_env
 
-	if [ "$1" = 'postgres' ] && ! _pg_want_help "$@"; then
-		docker_setup_env
-		# setup data directories and permissions (when run as root)
-		docker_create_db_directories
-		if [ "$(id -u)" = '0' ]; then
-			# then restart script as postgres user
-			exec su-exec postgres "$BASH_SOURCE" "$@"
-		fi
+    # check dir permissions to reduce likelihood of half-initialized database
+    ls /docker-entrypoint-initdb.d/ > /dev/null
 
-		# only run initialization on an empty data directory
-		if [ -z "$DATABASE_ALREADY_EXISTS" ]; then
-			docker_verify_minimum_env
+    docker_init_database_dir
+    pg_setup_hba_conf
 
-			# check dir permissions to reduce likelihood of half-initialized database
-			ls /docker-entrypoint-initdb.d/ > /dev/null
+    # PGPASSWORD is required for psql when authentication is required for 'local' connections via pg_hba.conf and is otherwise harmless
+    # e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
+    export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
+    docker_temp_server_start
 
-			docker_init_database_dir
-			pg_setup_hba_conf "$@"
+    docker_setup_db
+    docker_process_init_files /docker-entrypoint-initdb.d/*
 
-			# PGPASSWORD is required for psql when authentication is required for 'local' connections via pg_hba.conf and is otherwise harmless
-			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
-			export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
-			docker_temp_server_start "$@"
+    docker_temp_server_stop
+    unset PGPASSWORD
 
-			docker_setup_db
-			docker_process_init_files /docker-entrypoint-initdb.d/*
-
-			docker_temp_server_stop
-			unset PGPASSWORD
-
-			echo
-			echo 'PostgreSQL init process complete; ready for start up.'
-			echo
-		else
-			echo
-			echo 'PostgreSQL Database directory appears to contain a database; Skipping initialization'
-			echo
-		fi
-	fi
+    echo
+    echo 'PostgreSQL init process complete; ready for start up.'
+    echo
+  else
+    echo
+    echo 'PostgreSQL Database directory appears to contain a database; Skipping initialization'
+    echo
+  fi
 
 	su postgres -c postgres &
 }
