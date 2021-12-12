@@ -1,5 +1,6 @@
 /.idea
 /docker/dev/logs
+/docker/postgreslib
 node_modules
 
 ###> symfony/framework-bundle ###

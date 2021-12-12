@@ -8,6 +8,7 @@ services:
     environment:
       - MASCOT_PATH=${MASCOT_PATH:-%kernel.project_path%/empty}
       - ADDITIONAL_TEMPLATE_PATH=${ADDITIONAL_TEMPLATE_PATH:-%kernel.project_path%/empty}
+      - DATABASE_URL=postgresql://postgres:postgres@lypage_postgres/lypage?serverVersion=14.1&charset=utf8
     volumes:
       - ../../:/var/www
       - ./php/ini/custom.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -25,3 +26,12 @@ services:
       - ./logs/nginx:/var/log/nginx
     ports:
       - "80:80"
+
+  lypage_postgres:
+    container_name: lypage_postgres
+    image: postgres:14.1-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=lypage
+    volumes:
+      - ./postgreslib:/var/lib/postgresql/data
