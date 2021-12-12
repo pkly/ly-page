@@ -3,6 +3,6 @@
 set -m
 
 /usr/sbin/crond &
-nginx -g deamon on;
+nginx &
 
 php-fpm
