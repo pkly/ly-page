@@ -287,7 +287,7 @@ init_postgres() {
 		fi
 	fi
 
-	sudo -u postgres postgres &
+	su postgres -c postgres &
 }
 
 /usr/sbin/crond &
