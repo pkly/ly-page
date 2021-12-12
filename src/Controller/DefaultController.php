@@ -24,7 +24,7 @@ class DefaultController extends AbstractController
             $BASE_TEMPLATE,
             [
                 'body_title' => $splashTitleService->getTitle(),
-                'mascot' => $mascotService->getMascot($this->getSession()?->get(SessionOptions::MASCOT_PATHS->value, [])),
+                'mascot' => $mascotService->getMascot($this->getSession()?->get(SessionOptions::MASCOT_PATHS->value, []) ?? []),
             ]
         );
     }

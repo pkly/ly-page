@@ -2,18 +2,19 @@
 
 namespace App\Service;
 
+use App\Traits\CacheTrait;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Contracts\Cache\ItemInterface;
-use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 class MascotService
 {
+    use CacheTrait;
+
     public const TAG = 'mascot.service';
 
     public function __construct(
-        private readonly TagAwareCacheInterface $cache,
         private readonly string $MASCOT_PATH
     ) {
     }

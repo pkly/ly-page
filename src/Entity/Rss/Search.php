@@ -39,8 +39,9 @@ class Search
         return $this->query;
     }
 
-    public function setQuery(string $query): self
-    {
+    public function setQuery(
+        string $query
+    ): self {
         $this->query = $query;
 
         return $this;
@@ -51,8 +52,9 @@ class Search
         return $this->rssGroup;
     }
 
-    public function setRssGroup(?Group $rssGroup): self
-    {
+    public function setRssGroup(
+        ?Group $rssGroup
+    ): self {
         $this->rssGroup = $rssGroup;
 
         return $this;

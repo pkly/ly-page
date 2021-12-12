@@ -1,7 +1,8 @@
 /.idea
 /docker/dev/logs
-/docker/postgreslib
+/docker/dev/postgreslib
 node_modules
+.php-cs-fixer.cache
 
 ###> symfony/framework-bundle ###
 /.env.local

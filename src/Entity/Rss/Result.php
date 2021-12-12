@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ResultRepository::class)
+ * @ORM\Table(name="rss__result")
  */
 class Result
 {
@@ -52,8 +53,9 @@ class Result
         return $this->url;
     }
 
-    public function setUrl(string $url): self
-    {
+    public function setUrl(
+        string $url
+    ): self {
         $this->url = $url;
 
         return $this;
@@ -64,8 +66,9 @@ class Result
         return $this->title;
     }
 
-    public function setTitle(string $title): self
-    {
+    public function setTitle(
+        string $title
+    ): self {
         $this->title = $title;
 
         return $this;
@@ -76,8 +79,9 @@ class Result
         return $this->data;
     }
 
-    public function setData(array $data): self
-    {
+    public function setData(
+        array $data
+    ): self {
         $this->data = $data;
 
         return $this;
@@ -88,8 +92,9 @@ class Result
         return $this->seenAt;
     }
 
-    public function setSeenAt(?\DateTimeImmutable $seenAt): self
-    {
+    public function setSeenAt(
+        ?\DateTimeImmutable $seenAt
+    ): self {
         $this->seenAt = $seenAt;
 
         return $this;
@@ -100,8 +105,9 @@ class Result
         return $this->guid;
     }
 
-    public function setGuid(string $guid): self
-    {
+    public function setGuid(
+        string $guid
+    ): self {
         $this->guid = $guid;
 
         return $this;
