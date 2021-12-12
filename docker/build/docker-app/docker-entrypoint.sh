@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-set -m
+set -Eeo pipefail
 
 # used to create initial postgres directories and if run as root, ensure ownership to the "postgres" user
 docker_create_db_directories() {
