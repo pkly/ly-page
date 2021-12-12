@@ -164,7 +164,7 @@ RUN set -eux; \
 RUN set -eux; \
 	cp -v /usr/local/share/postgresql/postgresql.conf.sample /usr/local/share/postgresql/postgresql.conf.sample.orig; \
 	sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/local/share/postgresql/postgresql.conf.sample; \
-	grep -F "listen_addresses = '*'" /usr/local/share/postgresql/postgresql.conf.sample \
+	grep -F "listen_addresses = '*'" /usr/local/share/postgresql/postgresql.conf.sample
 
 RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
 
