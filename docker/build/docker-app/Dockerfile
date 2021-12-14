@@ -34,6 +34,8 @@ RUN set -eux; \
 
 RUN mkdir /docker-entrypoint-initdb.d
 
+COPY --from=postgres:14.1-alpine /usr/local/share/postgresql/postgresql.conf.sample /usr/local/share/postgresql/postgresql.conf.sample
+
 # make the sample config easier to munge (and "correct by default")
 RUN set -eux; \
 	cp -v /usr/local/share/postgresql/postgresql.conf.sample /usr/local/share/postgresql/postgresql.conf.sample.orig; \
