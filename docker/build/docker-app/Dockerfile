@@ -1,6 +1,6 @@
 FROM ghcr.io/pkly/ly-page/lypage-php-fpm:latest
 
-RUN apk update && apk add nginx bash
+RUN apk update && apk add nginx bash postgresql14
 
 WORKDIR /var/www
 
@@ -35,16 +35,6 @@ RUN set -eux; \
 	chown -R postgres:postgres /var/lib/postgresql
 
 RUN mkdir /docker-entrypoint-initdb.d
-
-ENV PG_MAJOR 14
-ENV PG_VERSION 14.1
-ENV PG_SHA256 4d3c101ea7ae38982f06bdc73758b53727fb6402ecd9382006fa5ecc7c2ca41f
-
-# install postgres
-COPY --from=postgres:14.1-alpine /usr/local/bin/postgres /usr/local/bin/postgres
-COPY --from=postgres:14.1-alpine /usr/local/bin/initdb /usr/local/bin/initdb
-COPY --from=postgres:14.1-alpine /usr/local/bin/pg_ctl /usr/local/bin/pg_ctl
-COPY --from=postgres:14.1-alpine /usr/local/share/postgresql/postgresql.conf.sample /usr/local/share/postgresql/postgresql.conf.sample
 
 # make the sample config easier to munge (and "correct by default")
 RUN set -eux; \
