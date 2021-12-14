@@ -253,6 +253,8 @@ docker_temp_server_stop() {
 }
 
 init_postgres() {
+  su postgres
+
   docker_setup_env
   # setup data directories and permissions (when run as root)
   docker_create_db_directories
@@ -285,6 +287,7 @@ init_postgres() {
     echo 'PostgreSQL Database directory appears to contain a database; Skipping initialization'
     echo
   fi
+  exit
 
 	su postgres -c postgres &
 }
