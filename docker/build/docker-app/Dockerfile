@@ -29,7 +29,6 @@ RUN chmod +x /var/www/entrypoint.sh
 # PostgreSQL based on https://github.com/docker-library/postgres
 
 RUN set -eux; \
-	addgroup -g 70 -S postgres; \
 	adduser -u 70 -S -D -G postgres -H -h /var/lib/postgresql -s /bin/sh postgres; \
 	mkdir -p /var/lib/postgresql; \
 	chown -R postgres:postgres /var/lib/postgresql
