@@ -1,7 +1,11 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 set -Eeo pipefail
+# TODO swap to -Eeuo pipefail above (after handling all potentially-unset variables)
 
+# usage: file_env VAR [DEFAULT]
+#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
+# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
+#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
 file_env() {
 	local var="$1"
 	local fileVar="${var}_FILE"
@@ -18,6 +22,14 @@ file_env() {
 	fi
 	export "$var"="$val"
 	unset "$fileVar"
+}
+
+# check to see if this file is being run or sourced from another script
+_is_sourced() {
+	# https://unix.stackexchange.com/a/215279
+	[ "${#FUNCNAME[@]}" -ge 2 ] \
+		&& [ "${FUNCNAME[0]}" = '_is_sourced' ] \
+		&& [ "${FUNCNAME[1]}" = 'source' ]
 }
 
 # used to create initial postgres directories and if run as root, ensure ownership to the "postgres" user
@@ -215,9 +227,12 @@ docker_setup_env() {
 pg_setup_hba_conf() {
 	# default authentication method is md5 on versions before 14
 	# https://www.postgresql.org/about/news/postgresql-14-released-2318/
+	if [ "$1" = 'postgres' ]; then
+		shift
+	fi
 	local auth
 	# check the default/configured encryption and use that as the auth method
-	auth="md5"
+	auth="$(postgres -C password_encryption "$@")"
 	# postgres 9 only reports "on" and not "md5"
 	if [ "$auth" = 'on' ]; then
 		auth='md5'
@@ -236,13 +251,17 @@ pg_setup_hba_conf() {
 # start socket-only postgresql server for setting up or running scripts
 # all arguments will be passed along as arguments to `postgres` (via pg_ctl)
 docker_temp_server_start() {
+	if [ "$1" = 'postgres' ]; then
+		shift
+	fi
+
 	# internal start of server in order to allow setup using psql client
 	# does not listen on external TCP/IP and waits until start finishes
-	postgres -c listen_addresses='' -p "${PGPORT:-5432}" &
+	set -- "$@" -c listen_addresses='' -p "${PGPORT:-5432}"
 
 	PGUSER="${PGUSER:-$POSTGRES_USER}" \
 	pg_ctl -D "$PGDATA" \
-		-o postgres \
+		-o "$(printf '%q ' "$@")" \
 		-w start
 }
 
@@ -250,6 +269,23 @@ docker_temp_server_start() {
 docker_temp_server_stop() {
 	PGUSER="${PGUSER:-postgres}" \
 	pg_ctl -D "$PGDATA" -m fast -w stop
+}
+
+# check arguments for an option that would cause postgres to stop
+# return true if there is one
+_pg_want_help() {
+	local arg
+	for arg; do
+		case "$arg" in
+			# postgres --help | grep 'then exit'
+			# leaving out -C on purpose since it always fails and is unhelpful:
+			# postgres: could not access the server configuration file "/var/lib/postgresql/data/postgresql.conf": No such file or directory
+			-'?'|--help|--describe-config|-V|--version)
+				return 0
+				;;
+		esac
+	done
+	return 1
 }
 
 _main() {
