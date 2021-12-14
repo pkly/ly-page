@@ -24,7 +24,8 @@ COPY docker/dev/nginx/sites/sites.conf /etc/nginx/sites-available/sites.conf
 COPY docker/dev/nginx/dev.conf /etc/nginx/nginx.conf
 
 COPY docker/build/docker-app/docker-entrypoint.sh /var/www/entrypoint.sh
-RUN chmod +x /var/www/entrypoint.sh
+COPY docker/build/docker-app/postgres.sh /var/www/postgres.sh
+RUN chmod +x /var/www/entrypoint.sh && chmod +x /var/www/postgres.sh
 
 # PostgreSQL based on https://github.com/docker-library/postgres
 
