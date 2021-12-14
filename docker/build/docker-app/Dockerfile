@@ -31,7 +31,9 @@ RUN chmod +x /var/www/entrypoint.sh && chmod +x /var/www/postgres.sh
 
 RUN set -eux; \
 	mkdir -p /var/lib/postgresql; \
-	chown -R postgres:postgres /var/lib/postgresql
+    mkdir -p /var/lib/postgresql/data; \
+	chown -R postgres:postgres /var/lib/postgresql \
+    chown -R postgres:postgres /var/lib/postgresql/data
 
 RUN mkdir /docker-entrypoint-initdb.d
 
