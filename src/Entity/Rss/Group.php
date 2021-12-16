@@ -4,6 +4,7 @@ namespace App\Entity\Rss;
 
 use App\Repository\Rss\GroupRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=GroupRepository::class)
@@ -57,5 +58,11 @@ class Group
         $this->url = $url;
 
         return $this;
+    }
+
+    #[Pure]
+    public function __toString(): string
+    {
+        return $this->getName() ?? 'Unknown';
     }
 }
