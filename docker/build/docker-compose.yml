@@ -1,0 +1,22 @@
+version: "3"
+services:
+  lypage_app:
+    container_name: lypage_app
+    image: ghcr.io/pkly/ly-page/lypage-app:latest
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@lypage_postgres_prod/lypage?serverVersion=14.1&charset=utf8
+    ports:
+      - "80:80"
+    depends_on:
+      - lypage_postgres_prod
+
+  lypage_postgres_prod:
+    container_name: lypage_postgres_prod
+    image: postgres:14.1-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=lypage
+    volumes:
+      - ./postgreslib:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
