@@ -1,6 +1,7 @@
 /.idea
 /docker/dev/logs
 /docker/dev/postgreslib
+/docker/build/postgreslib
 node_modules
 .php-cs-fixer.cache
 
