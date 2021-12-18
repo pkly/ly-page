@@ -31,7 +31,38 @@
                 <div class="row row-main">
                     <div class="col-12 col-md-6">
                         {% block left_column %}
-                            {{ macro.card('example', 'This card is an example, you should extend this template, read more <a href="https://github.com/pkly/ly-page">here</a>', {'http://foo.bar': 'example'}) }}
+                            {% block rss_left %}
+                                {% if rss_results|length %}
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h5>rss results</h5>
+                                            <div class="card-subtitle mb-2">
+                                                <div class="row">
+                                                    <div class="col-12 col-md-7">
+                                                        dl me daddy
+                                                    </div>
+                                                    <div class="col-12 col-md-5 text-right">
+                                                        <a href="{{ path('front.mark_all_as_seen') }}" class="app-white">mark all as seen</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                {% for result in rss_results %}
+                                                    <div class="col-12 col-md-6">
+                                                        <a href="{{ path('front.file_proxy', {file: result.id}) }}" class="btn btn-outline-primary btn-sm"
+                                                           rel="noreferrer noopener">
+                                                            {{ result.title }}
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endblock %}
+                            {% block cards_left %}
+                                {{ macro.card('example', 'This card is an example, you should extend this template, read more <a href="https://github.com/pkly/ly-page">here</a>', {'http://foo.bar': 'example'}) }}
+                            {% endblock %}
                         {% endblock %}
                     </div>
                     <div class="col-12 col-md-6 mascot-container">
