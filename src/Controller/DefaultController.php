@@ -104,6 +104,7 @@ class DefaultController extends AbstractController
         ?MascotGroup $group
     ): RedirectResponse {
         $this->getSession()?->set(SessionOptions::MASCOT_GROUP->value, $group);
+        $this->getSession()?->set(SessionOptions::MASCOT_COUNTER->value, 0);
         return $this->redirectToRoute('front.index');
     }
 
