@@ -17,6 +17,8 @@ class DefaultController extends AbstractController
 {
     use SessionTrait;
 
+    public const MASCOT_UPDATE_IN_SECONDS = 60;
+
     #[Route("/", name: 'front.index')]
     public function index(
         string $BASE_TEMPLATE,
@@ -26,14 +28,34 @@ class DefaultController extends AbstractController
     ): Response {
         /** @var MascotGroup|null $group */
         $group = $this->getSession()?->get(SessionOptions::MASCOT_GROUP->value);
+        // since we cannot really cache the SplInfo, we'll just fetch the last count
+        $lastUpdate = $this->getSession()?->get(SessionOptions::LAST_MASCOT_UPDATE->value);
+        $counter = $this->getSession()?->get(SessionOptions::MASCOT_COUNTER->value, 0) ?? 0;
+
+        $mascot = $mascotService->getMascot(
+            $counter,
+            $group?->getDirectories() ?? []
+        );
+
+        if (null === $lastUpdate) {
+            $lastUpdate = time();
+        }
+
+        if ($lastUpdate + self::MASCOT_UPDATE_IN_SECONDS < time()) {
+            $counter++;
+
+            if ($counter >= $mascotService->getLastMascotCount()) {
+                $counter = 0; // reset counter
+            }
+
+            $this->getSession()?->set(SessionOptions::MASCOT_COUNTER->value, $counter);
+        }
+
         return $this->render(
             $BASE_TEMPLATE,
             [
                 'body_title' => $splashTitleService->getTitle(),
-                'mascot' => $mascotService->getMascot(
-                    $this->getSession()?->get(SessionOptions::MASCOT_COUNTER->value, 0) ?? 0,
-                    $group?->getDirectories() ?? []
-                ),
+                'mascot' => $mascot,
                 'mascot_groups' => $mascotGroupRepository->findAll(),
                 'mascot_group' => $group,
             ]

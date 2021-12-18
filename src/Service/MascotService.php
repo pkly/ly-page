@@ -12,6 +12,8 @@ class MascotService
 {
     use CacheTrait;
 
+    private int|null $mascotCounter = null;
+
     public const TAG = 'mascot.service';
 
     public function __construct(
@@ -24,12 +26,18 @@ class MascotService
         int $counter = 0,
         array $paths = []
     ): SplFileInfo|null {
-        if (null === ($mascot = $this->getMascots($paths)[$counter] ?? null)) {
+        $this->mascotCounter = count($mascots = $this->getMascots($paths));
+        if (null === ($mascot = $mascots[$counter] ?? null)) {
             return null;
         }
 
         $rel = mb_substr($this->MASCOT_PATH, mb_strlen($this->PUBLIC_DIR));
         return new SplFileInfo($this->MASCOT_PATH.DIRECTORY_SEPARATOR.$mascot, $rel.DIRECTORY_SEPARATOR.$mascot, $rel);
+    }
+
+    public function getLastMascotCount(): int
+    {
+        return $this->mascotCounter;
     }
 
     public function getDirectories(): array
