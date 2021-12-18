@@ -6,8 +6,6 @@ services:
     build:
       context: ./php
     environment:
-      - MASCOT_PATH=${MASCOT_PATH:-%kernel.project_path%/empty}
-      - ADDITIONAL_TEMPLATE_PATH=${ADDITIONAL_TEMPLATE_PATH:-%kernel.project_path%/empty}
       - DATABASE_URL=postgresql://postgres:postgres@lypage_postgres/lypage?serverVersion=14.1&charset=utf8
     volumes:
       - ../../:/var/www

@@ -4,6 +4,8 @@
 /docker/build/postgreslib
 node_modules
 .php-cs-fixer.cache
+/local
+/public/local
 
 ###> symfony/framework-bundle ###
 /.env.local

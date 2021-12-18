@@ -1,4 +1,6 @@
 {# @var Symfony\Component\Finder\SplFileInfo mascot #}
+{# @var App\Entity\MascotGroup[] mascot_groups #}
+{# @var App\Entity\MascotGroup mascot_group #}
 {% import "macro.html.twig" as macro %}
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +37,12 @@
                     <div class="col-12 col-md-6 mascot-container">
                         {% block right_column %}
                             {% if mascot is not null %}
-                                <img src="{{ mascot.relativePathname }}" class="mascot img-mascot" />
+                                {# since checking mimes is slow, just check extension instead #}
+                                {% if mascot.extension in ['png', 'jpg', 'jpeg', 'gif', 'webp'] %}
+                                    <img src="{{ mascot.relativePath }}" class="mascot img-mascot" />
+                                {% else %}
+                                    <video src="{{ mascot.relativePath }}" autoplay loop class="mascot video-mascot"></video>
+                                {% endif %}
                             {% endif %}
                         {% endblock %}
                     </div>
@@ -44,7 +51,17 @@
             {% block footer %}
                 <footer>
                     {% block footer_body %}
-                        <a href="{{ path('app_admin_dashboard_index') }}">admin</a>
+                        {% block footer_links %}
+                            {{ macro.if_not_link('app_admin_dashboard_index', 'admin') }}
+                        {% endblock %}
+                        {% block footer_actions %}
+                            <select id="mascot-group-select" class="form-select form-select-sm">
+                                <option value="0" {% if mascot_group is null %}selected="selected"{% endif %}>None</option>
+                                {% for group in mascot_groups %}
+                                    <option value="{{ group.id }}" {% if mascot_group is not null and mascot_group.id == group.id %}selected="selected"{% endif %}>{{ group.title }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endblock %}
                     {% endblock %}
                 </footer>
             {% endblock %}
@@ -53,6 +70,10 @@
         <script>
             window.onload = function () {
                 document.getElementsByTagName("body").item(0).style.opacity = 1;
+            };
+
+            document.getElementById('mascot-group-select').onchange = function (e) {
+                window.location.href = '{{ path('front.set_mascot_group', {'group': '_replace'}) }}'.replace('_replace', e.target.value);
             };
         </script>
     </body>
