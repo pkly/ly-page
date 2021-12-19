@@ -69,7 +69,7 @@ class RssSearchCommand extends Command
             }
 
             foreach ($items as $item) {
-                if (null !== $this->resultRepository->findOneBy(['externalId' => $item['guid']])) {
+                if (null !== $this->resultRepository->findOneBy(['guid' => $item['guid']])) {
                     continue;
                 }
 
