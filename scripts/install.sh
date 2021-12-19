@@ -7,4 +7,4 @@ echo "Updating application"
 $DIR/../bin/console doctrine:database:create --if-not-exists
 $DIR/../bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
 
-chown -R 777 var/cache
+chmod -R 777 var/cache
