@@ -41,7 +41,7 @@ class DefaultController extends AbstractController
         ResultRepository $resultRepository
     ): Response {
         /** @var MascotGroup|null $group */
-        $group = $this->getSession()?->get(SessionOptions::MASCOT_GROUP->value);
+        $group = $this->getSession()?->get(SessionOptions::MASCOT_GROUP->value, $mascotGroupRepository->getDefault()) ?? $mascotGroupRepository->getDefault();
         // since we cannot really cache the SplInfo, we'll just fetch the last count
         $lastUpdate = $this->getSession()?->get(SessionOptions::LAST_MASCOT_UPDATE->value);
         $counter = $this->getSession()?->get(SessionOptions::MASCOT_COUNTER->value, 0) ?? 0;
@@ -52,7 +52,7 @@ class DefaultController extends AbstractController
         );
 
         if (null === $lastUpdate) {
-            $lastUpdate = time();
+            $this->getSession()?->set(SessionOptions::LAST_MASCOT_UPDATE->value, $lastUpdate = time());
         }
 
         if ($lastUpdate + self::MASCOT_UPDATE_IN_SECONDS < time()) {
@@ -63,6 +63,7 @@ class DefaultController extends AbstractController
             }
 
             $this->getSession()?->set(SessionOptions::MASCOT_COUNTER->value, $counter);
+            $this->getSession()?->set(SessionOptions::LAST_MASCOT_UPDATE->value, time());
         }
 
         return $this->render(

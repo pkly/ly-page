@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\MascotGroup;
 use App\Service\MascotService;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -29,6 +30,7 @@ class MascotGroupCrudController extends AbstractCrudController
             ->hideOnForm();
 
         yield TextField::new('title');
+        yield BooleanField::new('defaultGroup', 'Default');
         yield CollectionField::new('directories')
             ->setEntryType(ChoiceType::class)
             ->setFormTypeOption('entry_options.choices', array_combine($this->mascotService->getDirectories(), $this->mascotService->getDirectories()));

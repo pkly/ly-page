@@ -19,4 +19,9 @@ class MascotGroupRepository extends ServiceEntityRepository
     ) {
         parent::__construct($registry, MascotGroup::class);
     }
+
+    public function getDefault(): ?MascotGroup
+    {
+        return $this->findBy(['defaultGroup' => true], ['id' => 'DESC'], 1)[0] ?? null;
+    }
 }
