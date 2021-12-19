@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DefaultController extends AbstractController
@@ -74,6 +75,14 @@ class DefaultController extends AbstractController
                 'rss_results' => $this->resultRepository->findBy(['seenAt' => null], ['id' => 'ASC'], 10),
             ]
         );
+    }
+
+    #[Route('/recache-mascots', name: 'front.recache_mascots')]
+    public function recache(
+        TagAwareCacheInterface $cache
+    ): RedirectResponse {
+        $cache->invalidateTags([MascotService::TAG]);
+        return $this->redirectToRoute('front.index');
     }
 
     #[Route('/proxy/{file}', name: 'front.file_proxy')]

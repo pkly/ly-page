@@ -69,7 +69,7 @@ class MascotService
 
         return $this->cache->get($key, function (ItemInterface $item) use ($paths) {
             $item->tag(self::TAG)
-                ->expiresAfter(15);
+                ->expiresAfter(60 * 60 * 24 * 60); // 2 months
 
             $trimmed = rtrim($this->MASCOT_PATH, '/\\');
             $dirs = [];
@@ -83,12 +83,15 @@ class MascotService
             }
 
             try {
-                return array_values(
+                $results = array_values(
                     array_map(
                         fn (SplFileInfo $f) => mb_substr($f->getRealPath(), mb_strlen($this->MASCOT_PATH) + 1),
                         iterator_to_array((new Finder())->in($dirs)->files())
                     )
                 );
+                shuffle($results);
+
+                return $results;
             } catch (DirectoryNotFoundException) {
                 return [];
             }
