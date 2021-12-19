@@ -6,3 +6,5 @@ Mostly a simple example of a website that could be ran on a home network (which 
 Also a PWA, to allow you to "take it anywhere", granted the rss feeds will not update and you'll be stuck with the same mascot.
 
 Docker images are accessible and easily upgradeable.
+
+See /docker/build/docker-compose.yml for an example of how to run this on your own network.
