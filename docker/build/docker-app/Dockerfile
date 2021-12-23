@@ -22,7 +22,7 @@ COPY docker/dev/nginx/dev.conf /etc/nginx/nginx.conf
 COPY docker/build/docker-app/docker-entrypoint.sh /var/www/entrypoint.sh
 RUN chmod +x /var/www/entrypoint.sh
 
-COPY docker/build/docker-app/crontab /etc/crontab
+COPY docker/build/docker-app/crontab /var/spool/cron/crontabs/root
 
 EXPOSE 80
 ENTRYPOINT /var/www/entrypoint.sh
