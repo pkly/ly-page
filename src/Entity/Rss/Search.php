@@ -4,6 +4,7 @@ namespace App\Entity\Rss;
 
 use App\Repository\Rss\SearchRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=SearchRepository::class)
@@ -76,5 +77,11 @@ class Search
         $this->directory = $directory;
 
         return $this;
+    }
+
+    #[Pure]
+    public function __toString(): string
+    {
+        return $this->getQuery() ?? 'Unknown';
     }
 }
