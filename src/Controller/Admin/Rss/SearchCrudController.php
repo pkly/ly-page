@@ -23,5 +23,6 @@ class SearchCrudController extends AbstractCrudController
 
         yield TextField::new('query');
         yield AssociationField::new('rssGroup');
+        yield TextField::new('directory');
     }
 }
