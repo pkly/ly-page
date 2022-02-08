@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Rss\Result;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -16,6 +17,7 @@ class QBitTorrentService
     private ?string $session = null;
 
     public function __construct(
+        private ?LoggerInterface $logger,
         private HttpClientInterface $client,
         private RouterInterface $router,
         private string $QBITTORRENT_URL,
@@ -49,9 +51,13 @@ class QBitTorrentService
             ]);
 
             if (Response::HTTP_OK !== $response->getStatusCode()) {
+                $this->logger?->error('Unable to add torrents', ['content' => $response->getContent(false)]);
+
                 return false;
             }
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logger?->error('Exception occurred', ['message' => $e->getMessage()]);
+
             return false;
         }
 
@@ -69,14 +75,20 @@ class QBitTorrentService
             ]);
 
             if (Response::HTTP_OK !== $response->getStatusCode()) {
+                $this->logger?->error('Unable to login', ['content' => $response->getContent(false)]);
+
                 return false;
             }
 
             if (null === ($header = $response->getHeaders(false)['set-cookie'][0] ?? null)) {
+                $this->logger?->error('Unable to login, no cookie', ['content' => $response->getContent(false)]);
+
                 return false;
             }
             $this->session = explode('=', explode(';', $header)[0])[1];
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logger?->error('Exception occurred', ['message' => $e->getMessage()]);
+
             return false;
         }
 
