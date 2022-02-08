@@ -43,6 +43,11 @@ class Result
      */
     private $guid;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Search::class)
+     */
+    private $search;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,6 +114,19 @@ class Result
         string $guid
     ): self {
         $this->guid = $guid;
+
+        return $this;
+    }
+
+    public function getSearch(): ?Search
+    {
+        return $this->search;
+    }
+
+    public function setSearch(
+        ?Search $search
+    ): self {
+        $this->search = $search;
 
         return $this;
     }

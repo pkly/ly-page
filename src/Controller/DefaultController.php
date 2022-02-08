@@ -8,6 +8,7 @@ use App\Enum\SessionOptions;
 use App\Repository\MascotGroupRepository;
 use App\Repository\Rss\ResultRepository;
 use App\Service\MascotService;
+use App\Service\QBitTorrentService;
 use App\Service\SplashTitleService;
 use App\Traits\EntityManagerTrait;
 use App\Traits\SessionTrait;
@@ -37,8 +38,7 @@ class DefaultController extends AbstractController
         string $BASE_TEMPLATE,
         MascotService $mascotService,
         SplashTitleService $splashTitleService,
-        MascotGroupRepository $mascotGroupRepository,
-        ResultRepository $resultRepository
+        MascotGroupRepository $mascotGroupRepository
     ): Response {
         /** @var MascotGroup|null $group */
         $group = $this->getSession()?->get(SessionOptions::MASCOT_GROUP->value, $mascotGroupRepository->getDefault()) ?? $mascotGroupRepository->getDefault();
@@ -100,6 +100,17 @@ class DefaultController extends AbstractController
         $this->em->flush();
 
         return $this->download($response->getContent(), 'file-'.$file->getId().'.torrent', $response->getHeaders()['content-type'][0] ?? 'text/plain');
+    }
+
+    #[Route('/proxy-api/{file}', name: 'front.file_proxy_api')]
+    public function proxyWithApi(
+        QBitTorrentService $service,
+        Result $file
+    ): Response {
+        if (!$service->addTorrent($file)) {
+            return new Response('Failed to add new torrent via api', 500);
+        }
+        return $this->redirectToRoute('front.index');
     }
 
     #[Route('/mark-all-as-seen', name: 'front.mark_all_as_seen')]

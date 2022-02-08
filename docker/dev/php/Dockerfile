@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine3.15
+FROM php:8.1.1-fpm-alpine3.15
 
 # dependencies
 RUN apk update

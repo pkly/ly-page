@@ -24,3 +24,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+
+    App\Service\QBitTorrentService:
+        arguments:
+            $QBITTORRENT_URL: '%env(string:QBITTORRENT_URL)%'
+            $QBITTORRENT_USERNAME: '%env(string:QBITTORRENT_USERNAME)%'
+            $QBITTORRENT_PASSWORD: '%env(string:QBITTORRENT_PASSWORD)%'
+            $QBITTORRENT_BASE_PATH: '%env(string:QBITTORRENT_BASE_PATH)%'

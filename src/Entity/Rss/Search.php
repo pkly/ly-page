@@ -29,6 +29,11 @@ class Search
      */
     private ?Group $rssGroup;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $directory;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,6 +61,19 @@ class Search
         ?Group $rssGroup
     ): self {
         $this->rssGroup = $rssGroup;
+
+        return $this;
+    }
+
+    public function getDirectory(): ?string
+    {
+        return $this->directory;
+    }
+
+    public function setDirectory(
+        ?string $directory
+    ): self {
+        $this->directory = $directory;
 
         return $this;
     }

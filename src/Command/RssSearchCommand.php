@@ -77,7 +77,8 @@ class RssSearchCommand extends Command
                     ->setTitle($item['title'] ?? 'Unknown title?')
                     ->setGuid($item['guid'])
                     ->setUrl($item['link'])
-                    ->setData($item);
+                    ->setData($item)
+                    ->setSearch($search);
 
                 $this->em->persist($found);
                 $this->em->flush();

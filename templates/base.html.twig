@@ -49,7 +49,7 @@
                                             <div class="row">
                                                 {% for result in rss_results %}
                                                     <div class="col-12 col-md-6">
-                                                        <a href="{{ path('front.file_proxy', {file: result.id}) }}" class="btn btn-outline-primary btn-sm"
+                                                        <a href="{{ path('front.file_proxy_api', {file: result.id}) }}" class="btn btn-outline-primary btn-sm"
                                                            rel="noreferrer noopener">
                                                             {{ result.title }}
                                                         </a>
