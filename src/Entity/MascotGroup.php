@@ -3,33 +3,24 @@
 namespace App\Entity;
 
 use App\Repository\MascotGroupRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=MascotGroupRepository::class)
- */
+#[ORM\Entity(repositoryClass: MascotGroupRepository::class)]
 class MascotGroup
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $title;
 
-    /**
-     * @ORM\Column(type="array")
-     */
+    #[ORM\Column(type: Types::ARRAY)]
     private array $directories = [];
 
-    /**
-     * @ORM\Column(type="boolean", options={"default": 0})
-     */
+    #[ORM\Column(options: ['default' => false])]
     private ?bool $defaultGroup = false;
 
     public function getId(): ?int
@@ -44,7 +35,7 @@ class MascotGroup
 
     public function setTitle(
         string $title
-    ): self {
+    ): static {
         $this->title = $title;
 
         return $this;
@@ -57,7 +48,7 @@ class MascotGroup
 
     public function setDirectories(
         array $directories
-    ): self {
+    ): static {
         $this->directories = $directories;
 
         return $this;
@@ -70,7 +61,7 @@ class MascotGroup
 
     public function setDefaultGroup(
         bool $defaultGroup
-    ): self {
+    ): static {
         $this->defaultGroup = $defaultGroup;
 
         return $this;

@@ -3,50 +3,35 @@
 namespace App\Entity\Rss;
 
 use App\Repository\Rss\ResultRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ResultRepository::class)
- * @ORM\Table(name="rss__result")
- */
+#[ORM\Entity(repositoryClass: ResultRepository::class)]
+#[ORM\Table(name: 'rss__result')]
 class Result
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $url;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $url;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $title;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $title;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $data = [];
+    #[ORM\Column(type: Types::JSON)]
+    private array $data = [];
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
-    private $seenAt;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $seenAt;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $guid;
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    private ?string $guid;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Search::class)
-     */
-    private $search;
+    #[ORM\ManyToOne]
+    private ?Search $search;
 
     public function getId(): ?int
     {
