@@ -24,6 +24,7 @@ class ResultRepository extends ServiceEntityRepository
     {
         $this->createQueryBuilder('r')
             ->update(Result::class, 'r')
+            ->where('r.seenAt is null')
             ->set('r.seenAt', ':date')
             ->setParameter(':date', new \DateTimeImmutable())
             ->getQuery()

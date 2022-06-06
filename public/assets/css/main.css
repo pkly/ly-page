@@ -11631,6 +11631,7 @@ footer a {
 }
 .mascot-container .video-mascot {
   margin-bottom: calc(1.5rem + 20px);
+  max-height: calc(100vh - 3rem - 100px);
 }
 
 #mascot-group-select {
