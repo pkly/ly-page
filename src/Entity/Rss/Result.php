@@ -24,7 +24,7 @@ class Result
     #[ORM\Column(type: Types::JSON)]
     private array $data = [];
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private \DateTimeImmutable|null $seenAt;
 
     #[ORM\Column(type: Types::STRING, length: 255)]

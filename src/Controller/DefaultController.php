@@ -25,7 +25,7 @@ class DefaultController extends AbstractController
     use SessionTrait;
     use EntityManagerTrait;
 
-    public const MASCOT_UPDATE_IN_SECONDS = 60;
+    public const int MASCOT_UPDATE_IN_SECONDS = 60;
 
     public function __construct(
         private readonly ResultRepository $resultRepository,

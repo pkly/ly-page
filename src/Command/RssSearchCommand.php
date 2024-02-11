@@ -6,6 +6,7 @@ use App\Entity\Rss\Result;
 use App\Repository\Rss\ResultRepository;
 use App\Repository\Rss\SearchRepository;
 use App\Traits\EntityManagerTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,27 +14,21 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+#[AsCommand(
+    name: 'app:cron-search',
+    description: 'Run possible cron searches'
+)]
 class RssSearchCommand extends Command
 {
     use EntityManagerTrait;
 
-    protected static $defaultName = 'app:cron-search';
-    protected static $defaultDescription = 'Run possible cron searches';
-    private HttpClientInterface $client;
-
     public function __construct(
-        private SearchRepository $searchRepository,
-        private ResultRepository $resultRepository,
+        private readonly HttpClientInterface $client,
+        private readonly SearchRepository $searchRepository,
+        private readonly ResultRepository $resultRepository,
         string $name = null
     ) {
-        $this->client = HttpClient::create();
         parent::__construct($name);
-    }
-
-    protected function configure()
-    {
-        $this
-            ->setDescription(self::$defaultDescription);
     }
 
     protected function execute(
