@@ -14,10 +14,10 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class QBitTorrentService
 {
-    private ?string $session = null;
+    private string|null $session = null;
 
     public function __construct(
-        private ?LoggerInterface $logger,
+        private LoggerInterface|null $logger,
         private HttpClientInterface $client,
         private RouterInterface $router,
         private string $QBITTORRENT_URL,

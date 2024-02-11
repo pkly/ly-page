@@ -13,32 +13,32 @@ class Result
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id;
+    private int|null $id;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $url;
+    private string|null $url;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $title;
+    private string|null $title;
 
     #[ORM\Column(type: Types::JSON)]
     private array $data = [];
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $seenAt;
+    private \DateTimeImmutable|null $seenAt;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $guid;
+    private string|null $guid;
 
     #[ORM\ManyToOne]
-    private ?Search $search;
+    private Search|null $search;
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getUrl(): ?string
+    public function getUrl(): string|null
     {
         return $this->url;
     }
@@ -51,7 +51,7 @@ class Result
         return $this;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string|null
     {
         return $this->title;
     }
@@ -64,7 +64,7 @@ class Result
         return $this;
     }
 
-    public function getData(): ?array
+    public function getData(): array|null
     {
         return $this->data;
     }
@@ -77,20 +77,20 @@ class Result
         return $this;
     }
 
-    public function getSeenAt(): ?\DateTimeImmutable
+    public function getSeenAt(): \DateTimeImmutable|null
     {
         return $this->seenAt;
     }
 
     public function setSeenAt(
-        ?\DateTimeImmutable $seenAt
+        \DateTimeImmutable|null $seenAt
     ): self {
         $this->seenAt = $seenAt;
 
         return $this;
     }
 
-    public function getGuid(): ?string
+    public function getGuid(): string|null
     {
         return $this->guid;
     }
@@ -103,13 +103,13 @@ class Result
         return $this;
     }
 
-    public function getSearch(): ?Search
+    public function getSearch(): Search|null
     {
         return $this->search;
     }
 
     public function setSearch(
-        ?Search $search
+        Search|null $search
     ): self {
         $this->search = $search;
 

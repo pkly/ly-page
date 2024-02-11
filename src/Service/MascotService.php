@@ -12,9 +12,9 @@ class MascotService
 {
     use CacheTrait;
 
-    private int|null $mascotCounter = null;
-
     public const TAG = 'mascot.service';
+
+    private int|null $mascotCounter = null;
 
     public function __construct(
         private readonly string $MASCOT_PATH,
@@ -27,11 +27,13 @@ class MascotService
         array $paths = []
     ): SplFileInfo|null {
         $this->mascotCounter = count($mascots = $this->getMascots($paths));
+
         if (null === ($mascot = $mascots[$counter] ?? null)) {
             return null;
         }
 
         $rel = mb_substr($this->MASCOT_PATH, mb_strlen($this->PUBLIC_DIR));
+
         return new SplFileInfo($this->MASCOT_PATH.DIRECTORY_SEPARATOR.$mascot, $rel.DIRECTORY_SEPARATOR.$mascot, $rel);
     }
 
@@ -63,6 +65,7 @@ class MascotService
         array $paths = []
     ): array {
         $key = self::TAG.'.mascots';
+
         foreach ($paths as $path) {
             $key .= '.'.strtr($path, ItemInterface::RESERVED_CHARACTERS, str_repeat('_', mb_strlen(ItemInterface::RESERVED_CHARACTERS)));
         }

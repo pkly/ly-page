@@ -12,23 +12,23 @@ class MascotGroup
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id;
+    private int|null $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $title;
+    private string|null $title;
 
-    #[ORM\Column(type: Types::ARRAY)]
+    #[ORM\Column(type: Types::JSON)]
     private array $directories = [];
 
     #[ORM\Column(options: ['default' => false])]
-    private ?bool $defaultGroup = false;
+    private bool|null $defaultGroup = false;
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string|null
     {
         return $this->title;
     }
@@ -41,7 +41,7 @@ class MascotGroup
         return $this;
     }
 
-    public function getDirectories(): ?array
+    public function getDirectories(): array|null
     {
         return $this->directories;
     }
@@ -54,7 +54,7 @@ class MascotGroup
         return $this;
     }
 
-    public function getDefaultGroup(): ?bool
+    public function getDefaultGroup(): bool|null
     {
         return $this->defaultGroup;
     }

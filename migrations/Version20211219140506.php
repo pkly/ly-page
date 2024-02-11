@@ -17,14 +17,16 @@ final class Version20211219140506 extends AbstractMigration
         return 'Add default group for mascots';
     }
 
-    public function up(Schema $schema): void
-    {
+    public function up(
+        Schema $schema
+    ): void {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE mascot_group ADD default_group BOOLEAN DEFAULT \'false\' NOT NULL');
     }
 
-    public function down(Schema $schema): void
-    {
+    public function down(
+        Schema $schema
+    ): void {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE mascot_group DROP default_group');

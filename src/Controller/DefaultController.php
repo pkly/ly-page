@@ -33,7 +33,7 @@ class DefaultController extends AbstractController
     ) {
     }
 
-    #[Route("/", name: 'front.index')]
+    #[Route('/', name: 'front.index')]
     public function index(
         string $BASE_TEMPLATE,
         MascotService $mascotService,
@@ -83,6 +83,7 @@ class DefaultController extends AbstractController
         TagAwareCacheInterface $cache
     ): RedirectResponse {
         $cache->invalidateTags([MascotService::TAG]);
+
         return $this->redirectToRoute('front.index');
     }
 
@@ -91,6 +92,7 @@ class DefaultController extends AbstractController
         Result $file
     ): Response {
         $response = $this->client->request('GET', $file->getUrl());
+
         if (Response::HTTP_OK !== $response->getStatusCode()) {
             return new Response('Failed to download file', 500);
         }
@@ -110,6 +112,7 @@ class DefaultController extends AbstractController
         if (!$service->addTorrent($file)) {
             return new Response('Failed to add new torrent via api', 500);
         }
+
         return $this->redirectToRoute('front.index');
     }
 
@@ -117,27 +120,22 @@ class DefaultController extends AbstractController
     public function setAllAsSeen(): RedirectResponse
     {
         $this->resultRepository->setAllAsSeen();
+
         return $this->redirectToRoute('front.index');
     }
 
     #[Route('/set-mascot-group/{group}', name: 'front.set_mascot_group')]
     public function setMascotGroup(
-        ?MascotGroup $group
+        MascotGroup|null $group
     ): RedirectResponse {
         $this->getSession()?->set(SessionOptions::MASCOT_GROUP->value, $group);
         $this->getSession()?->set(SessionOptions::MASCOT_COUNTER->value, 0);
+
         return $this->redirectToRoute('front.index');
     }
 
     /**
-     * Generate a download
-     *
-     * @param string $contents
-     * @param string $filename
-     * @param string $mime
-     * @param string $disposition
-     *
-     * @return Response
+     * Generate a download.
      */
     protected function download(
         string $contents,
@@ -152,7 +150,7 @@ class DefaultController extends AbstractController
         $response->headers->set('Content-Type', $mime);
         $response->headers->set(
             'Content-Disposition',
-            $response->headers->makeDisposition($disposition, $filename, 'file.'.$ext[count($ext)-1])
+            $response->headers->makeDisposition($disposition, $filename, 'file.'.$ext[count($ext) - 1])
         );
 
         $response->setContent($contents);

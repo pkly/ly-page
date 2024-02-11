@@ -14,20 +14,26 @@ class Group
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id;
+    private int|null $id;
 
     #[ORM\Column(type: Types::STRING, length: 50)]
-    private ?string $name;
+    private string|null $name;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $url;
+    private string|null $url;
 
-    public function getId(): ?int
+    #[Pure]
+    public function __toString(): string
+    {
+        return $this->getName() ?? 'Unknown';
+    }
+
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string|null
     {
         return $this->name;
     }
@@ -40,7 +46,7 @@ class Group
         return $this;
     }
 
-    public function getUrl(): ?string
+    public function getUrl(): string|null
     {
         return $this->url;
     }
@@ -51,11 +57,5 @@ class Group
         $this->url = $url;
 
         return $this;
-    }
-
-    #[Pure]
-    public function __toString(): string
-    {
-        return $this->getName() ?? 'Unknown';
     }
 }

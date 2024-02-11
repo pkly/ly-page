@@ -42,6 +42,7 @@ class RssSearchCommand extends Command
     ): int {
         $io = new SymfonyStyle($input, $output);
         $count = 0;
+
         foreach ($this->searchRepository->findBy(['active' => true]) as $search) {
             $response = $this->client->request(
                 'GET',

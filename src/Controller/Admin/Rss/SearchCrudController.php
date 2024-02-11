@@ -12,7 +12,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class SearchCrudController extends AbstractCrudController
 {
-    public static function getEntityFqcn(): string {
+    public static function getEntityFqcn(): string
+    {
         return Search::class;
     }
 
