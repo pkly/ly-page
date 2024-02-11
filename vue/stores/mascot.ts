@@ -74,7 +74,7 @@ export const useMascotStore = defineStore('mascot', () => {
         return group.mascots[currentIndex.value];
     }
 
-    return {groups, currentGroup, currentIndex, lastIndexes, updateAvailable: fetchUpdateAsNeeded, changeGroup, getCurrentMascot};
+    return {groups, currentGroup, currentIndex, lastIndexes, fetchUpdateAsNeeded, changeGroup, getCurrentMascot};
 }, {
     persist: true
 });

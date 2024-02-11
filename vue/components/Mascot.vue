@@ -6,7 +6,7 @@ let mascot = ref(null);
 
 onMounted(async () => {
     const store = useMascotStore();
-    await store.updateAvailable();
+    await store.fetchUpdateAsNeeded();
     mascot.value = store.getCurrentMascot();
 });
 </script>

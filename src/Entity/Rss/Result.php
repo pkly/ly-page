@@ -5,7 +5,6 @@ namespace App\Entity\Rss;
 use App\Repository\Rss\ResultRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ResultRepository::class)]
@@ -40,7 +39,7 @@ class Result
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['default' => 'NOW()'])]
     #[Groups('api')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable|null $createdAt = null;
 
     public function getId(): int|null
     {
@@ -54,8 +53,7 @@ class Result
 
     public function setUrl(
         string $url
-    ): self
-    {
+    ): self {
         $this->url = $url;
 
         return $this;
@@ -68,8 +66,7 @@ class Result
 
     public function setTitle(
         string $title
-    ): self
-    {
+    ): self {
         $this->title = $title;
 
         return $this;
@@ -82,8 +79,7 @@ class Result
 
     public function setData(
         array $data
-    ): self
-    {
+    ): self {
         $this->data = $data;
 
         return $this;
@@ -96,8 +92,7 @@ class Result
 
     public function setSeenAt(
         \DateTimeImmutable|null $seenAt
-    ): self
-    {
+    ): self {
         $this->seenAt = $seenAt;
 
         return $this;
@@ -110,8 +105,7 @@ class Result
 
     public function setGuid(
         string $guid
-    ): self
-    {
+    ): self {
         $this->guid = $guid;
 
         return $this;
@@ -124,20 +118,20 @@ class Result
 
     public function setSearch(
         Search|null $search
-    ): self
-    {
+    ): self {
         $this->search = $search;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable|null
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
+    public function setCreatedAt(
+        \DateTimeImmutable $createdAt
+    ): static {
         $this->createdAt = $createdAt;
 
         return $this;
