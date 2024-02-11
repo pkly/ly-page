@@ -6,6 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  publicDir: false,
   plugins: [
     vue(),
     vueJsx(),
@@ -13,10 +14,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        'main': 'vue/main.ts',
+        'main': './vue/main.ts',
       },
       output: {
-        entryFilenames: 'public/vue/[name].js'
+        dir: './public/vue/',
+        entryFilenames: '[name].js',
       }
     }
   }

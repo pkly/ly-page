@@ -67,7 +67,7 @@ class DefaultController extends AbstractController
         }
 
         return $this->render(
-            $BASE_TEMPLATE,
+            'homepage.html.twig',
             [
                 'body_title' => $splashTitleService->getTitle(),
                 'mascot' => $mascot,
