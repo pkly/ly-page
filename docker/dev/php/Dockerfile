@@ -4,7 +4,7 @@ FROM php:8.3-fpm-alpine
 RUN apk update
 RUN apk add zlib-dev icu-dev g++ curl curl-dev freetype-dev \
     libxml2-dev autoconf imagemagick-dev build-base bash \
-    file coreutils ncurses oniguruma-dev libzip-dev postgresql-dev
+    file coreutils ncurses oniguruma-dev libzip-dev postgresql-dev linux-headers
 
 # install generic extensions
 RUN docker-php-ext-install pdo_pgsql
