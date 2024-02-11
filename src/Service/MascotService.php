@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Repository\MascotGroupRepository;
 use App\Traits\CacheTrait;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
@@ -17,9 +18,43 @@ class MascotService
     private int|null $mascotCounter = null;
 
     public function __construct(
+        private readonly MascotGroupRepository $repository,
         private readonly string $MASCOT_PATH,
         private readonly string $PUBLIC_DIR
     ) {
+    }
+
+    public function getCachedGroups(): array
+    {
+        return $this->cache->get(self::TAG.'.mascots.groups', function (ItemInterface $item) {
+            $item->tag(self::TAG)
+                ->expiresAfter(60 * 60 * 24);
+
+            $data = [];
+
+            $rel = mb_substr($this->MASCOT_PATH, mb_strlen($this->PUBLIC_DIR));
+
+            foreach ($this->repository->findAll() as $group) {
+                $item = [
+                    'name' => $group->getTitle(),
+                    'default' => $group->getDefaultGroup(),
+                    'mascots' => [],
+                ];
+
+                foreach ($this->getMascots($group->getDirectories() ?? []) as $mascot) {
+                    $file = new SplFileInfo($this->MASCOT_PATH.DIRECTORY_SEPARATOR.$mascot, $rel.DIRECTORY_SEPARATOR.$mascot, $rel);
+
+                    $item['mascots'][] = [
+                        'url' => $rel.DIRECTORY_SEPARATOR.$mascot,
+                        'ext' => $file->getExtension(),
+                    ];
+                }
+
+                $data[] = $item;
+            }
+
+            return $data;
+        });
     }
 
     public function getMascot(

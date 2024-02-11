@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
-    {% block head %}
-        <meta charset="UTF-8">
-        <title>{% block title %}Home ~{% endblock %}</title>
+        {% block head %}
+                <meta charset="UTF-8">
+                <title>{% block title %}Home ~{% endblock %}</title>
 
-        {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-        {% endblock %}
+                <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-reboot.min.css') }}"/>
+                <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"/>
+
+                <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+
+                {% for file in get_vue_styles() %}
+                    <link rel="stylesheet" href="{{ file }}" />
+                {% endfor %}
 
         {% block javascripts %}
-            <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}" ></script>
-
-            {% set vueEntrypoint = get_vue_entrypoint() %}
-            {% if vueEntrypoint != null %}
+                {% set vueEntrypoint = get_vue_entrypoint() %}
+                {% if vueEntrypoint != null %}
                 <script src="{{ vueEntrypoint }}" type="module"></script>
-            {% endif %}
+                {% endif %}
         {% endblock %}
 
-
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link rel="icon" href="{{ asset('assets/images/icon.png') }}" />
-    {% endblock %}
+                <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+                <link rel="icon" href="{{ asset('assets/images/icon.png') }}"/>
+        {% endblock %}
 </head>
 <body class="{% block body_class %}py-4 px-md-4{% endblock %}" style="opacity: 0">
 {# this just makes it so the page can not flashbang you #}
 <div id="app"></div>
 <script>
-    window.onload = function () {
-        document.getElementsByTagName("body").item(0).style.opacity = 1;
-    };
+        window.onload = function () {
+                document.getElementsByTagName("body").item(0).style.opacity = 1;
+        };
 </script>
 </body>
 </html>

@@ -11,7 +11,8 @@ class Extension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('get_vue_entrypoint', $this->vueEntrypoint(...))
+            new TwigFunction('get_vue_entrypoint', $this->vueEntrypoint(...)),
+            new TwigFunction('get_vue_styles', $this->vueStyles(...)),
         ];
     }
 
@@ -25,5 +26,20 @@ class Extension extends AbstractExtension
         }
 
         return $filename;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function vueStyles(): array
+    {
+        $files = [];
+
+        foreach ((new Finder())->in(__DIR__.'/../../public/vue/assets')->name('*.css')->files() as $file) {
+            $pos = strpos($path = $file->getRealPath(), 'public/vue/assets');
+            $files[] = substr($path, $pos + 7);
+        }
+
+        return $files;
     }
 }

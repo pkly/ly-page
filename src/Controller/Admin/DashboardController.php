@@ -27,6 +27,10 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section();
 
+        yield MenuItem::linkToUrl('Clear caches', 'fa fa-gem', $this->generateUrl('front.clear_cache'));
+
+        yield MenuItem::section();
+
         yield MenuItem::linkToCrud('Mascot groups', 'fa fa-home', MascotGroup::class);
 
         yield MenuItem::section();
@@ -39,7 +43,7 @@ class DashboardController extends AbstractDashboardController
     public function configureCrud(): Crud
     {
         return parent::configureCrud()
-            ->setDateFormat('Y-m-d')
+            ->setDateFormat('Y-MM-d')
             ->setDateTimeFormat('Y-MM-dd hh:mm:ss');
     }
 }

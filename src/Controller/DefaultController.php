@@ -13,9 +13,11 @@ use App\Service\SplashTitleService;
 use App\Traits\EntityManagerTrait;
 use App\Traits\SessionTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\CacheClearer\Psr6CacheClearer;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -31,6 +33,15 @@ class DefaultController extends AbstractController
         private readonly ResultRepository $resultRepository,
         private readonly HttpClientInterface $client
     ) {
+    }
+
+    #[Route('/clear-caches', name: 'front.clear_cache')]
+    public function clearCaches(
+        #[Autowire(service: 'cache.global_clearer')] Psr6CacheClearer $clearer
+    ): RedirectResponse {
+        $clearer->clearPool('cache.app');
+
+        return $this->redirectToRoute('app_admin_dashboard_index');
     }
 
     #[Route('/', name: 'front.index')]
