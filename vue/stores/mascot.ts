@@ -1,14 +1,22 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import moment from "moment";
 
 export const useMascotStore = defineStore('mascot', () => {
     const groups = ref([]);
     const currentGroup = ref(null);
     const currentIndex = ref(0);
     const lastIndexes = ref([]);
-    const lastUpdate = ref(null);
+    const lastIndexUpdate = ref(null);
+    const lastGroupUpdate = ref(null);
 
-    async function updateAvailable() {
+    async function fetchUpdateAsNeeded() {
+        if (null === lastGroupUpdate.value || moment(lastGroupUpdate.value).add(1, 'day').isBefore(moment())) {
+            lastGroupUpdate.value = moment();
+        } else {
+            return;
+        }
+
         const response = await fetch('/api/mascot-groups');
         groups.value = await response.json();
 
@@ -57,16 +65,16 @@ export const useMascotStore = defineStore('mascot', () => {
 
         const group = getGroupByName(currentGroup.value);
 
-        if (lastUpdate.value === null) {
-            lastUpdate.value = new Date();
-        } else if (new Date(lastUpdate.value.getTime() + 60000) < new Date()) { // 1m
+        if (lastIndexUpdate.value === null) {
+            lastIndexUpdate.value = moment();
+        } else if (moment(lastIndexUpdate.value).add(1, 'minute').isBefore(moment())) {
             rollIndex();
         }
 
         return group.mascots[currentIndex.value];
     }
 
-    return {groups, currentGroup, currentIndex, lastIndexes, updateAvailable, changeGroup, getCurrentMascot};
+    return {groups, currentGroup, currentIndex, lastIndexes, updateAvailable: fetchUpdateAsNeeded, changeGroup, getCurrentMascot};
 }, {
     persist: true
 });

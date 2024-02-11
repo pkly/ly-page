@@ -6,6 +6,7 @@ use App\Repository\Rss\SearchRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: SearchRepository::class)]
 #[ORM\Table(name: 'rss__search')]
@@ -14,13 +15,16 @@ class Search
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups('api')]
     private int|null $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Groups('api')]
     private string|null $query;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('api')]
     private Group|null $rssGroup;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]

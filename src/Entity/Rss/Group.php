@@ -6,6 +6,7 @@ use App\Repository\Rss\GroupRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\Table(name: 'rss__group')]
@@ -14,9 +15,11 @@ class Group
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups('api')]
     private int|null $id;
 
     #[ORM\Column(type: Types::STRING, length: 50)]
+    #[Groups('api')]
     private string|null $name;
 
     #[ORM\Column(type: Types::STRING, length: 255)]

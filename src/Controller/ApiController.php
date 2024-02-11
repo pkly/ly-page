@@ -7,6 +7,7 @@ use App\Service\MascotService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api', name: 'api.')]
 class ApiController extends AbstractController
@@ -22,6 +23,10 @@ class ApiController extends AbstractController
     public function getRssFinds(
         ResultRepository $repository
     ): JsonResponse {
-        return $this->json($repository->findBy(['seenAt' => null]));
+        return $this->json($repository->findBy(['seenAt' => null]), context: [
+            AbstractNormalizer::GROUPS => [
+                'api',
+            ],
+        ]);
     }
 }

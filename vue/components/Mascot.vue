@@ -1,9 +1,14 @@
 <script setup lang="ts">
+import {onMounted, ref} from "vue";
 import {useMascotStore} from "./../stores/mascot";
 
-const store = useMascotStore();
-// await store.updateAvailable();
-const mascot = store.getCurrentMascot();
+let mascot = ref(null);
+
+onMounted(async () => {
+    const store = useMascotStore();
+    await store.updateAvailable();
+    mascot.value = store.getCurrentMascot();
+});
 </script>
 
 <template>
