@@ -13,4 +13,12 @@ class SplashTitleService
     {
         return self::TITLES[array_rand(self::TITLES)];
     }
+
+    /**
+     * @return list<string>
+     */
+    public function getTitles(): array
+    {
+        return self::TITLES;
+    }
 }

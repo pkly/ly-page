@@ -6,6 +6,7 @@ use App\Repository\Rss\SearchRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: SearchRepository::class)]
 #[ORM\Table(name: 'rss__search')]
@@ -14,26 +15,37 @@ class Search
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id;
+    #[Groups('api')]
+    private int|null $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $query;
+    #[Groups('api')]
+    private string|null $query;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Group $rssGroup;
+    #[Groups('api')]
+    private Group|null $rssGroup;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $directory;
+    private string|null $directory;
 
     #[ORM\Column(options: ['default' => true])]
-    private ?bool $active;
+    private bool|null $active;
 
-    public function getId(): ?int {
+    #[Pure]
+    public function __toString(): string
+    {
+        return $this->getQuery() ?? 'Unknown';
+    }
+
+    public function getId(): int|null
+    {
         return $this->id;
     }
 
-    public function getQuery(): ?string {
+    public function getQuery(): string|null
+    {
         return $this->query;
     }
 
@@ -45,44 +57,42 @@ class Search
         return $this;
     }
 
-    public function getRssGroup(): ?Group {
+    public function getRssGroup(): Group|null
+    {
         return $this->rssGroup;
     }
 
     public function setRssGroup(
-        ?Group $rssGroup
+        Group|null $rssGroup
     ): static {
         $this->rssGroup = $rssGroup;
 
         return $this;
     }
 
-    public function getDirectory(): ?string {
+    public function getDirectory(): string|null
+    {
         return $this->directory;
     }
 
     public function setDirectory(
-        ?string $directory
+        string|null $directory
     ): static {
         $this->directory = $directory;
 
         return $this;
     }
 
-    public function isActive(): ?bool {
+    public function isActive(): bool|null
+    {
         return $this->active;
     }
 
     public function setActive(
-        ?bool $active
+        bool|null $active
     ): static {
         $this->active = $active;
 
         return $this;
-    }
-
-    #[Pure]
-    public function __toString(): string {
-        return $this->getQuery() ?? 'Unknown';
     }
 }

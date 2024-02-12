@@ -1,8 +1,8 @@
 default:
     resource: ../src/Controller/
-    type: annotation
+    type: attribute
 
 admin:
     resource: ../src/Controller/Admin/
-    type: annotation
+    type: attribute
     prefix: /admin
