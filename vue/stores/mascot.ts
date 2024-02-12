@@ -11,8 +11,8 @@ export const useMascotStore = defineStore('mascot', () => {
     const lastGroupUpdate = ref(null);
 
     async function fetchUpdateAsNeeded() {
-        if (null === lastGroupUpdate.value || moment(lastGroupUpdate.value).add(1, 'day').isBefore(moment())) {
-            lastGroupUpdate.value = moment();
+        if (null === lastGroupUpdate.value || moment.utc(lastGroupUpdate.value).add(1, 'day').isBefore(moment().utc())) {
+            lastGroupUpdate.value = moment().utc();
         } else {
             return;
         }
@@ -55,7 +55,12 @@ export const useMascotStore = defineStore('mascot', () => {
     }
 
     function rollIndex() {
+        if (currentGroup.value === null) {
+            return;
+        }
 
+        const group = getGroupByName(currentGroup.value);
+        currentIndex.value = Math.floor(Math.random() * group.mascots.length);
     }
 
     function getCurrentMascot() {
@@ -66,15 +71,16 @@ export const useMascotStore = defineStore('mascot', () => {
         const group = getGroupByName(currentGroup.value);
 
         if (lastIndexUpdate.value === null) {
-            lastIndexUpdate.value = moment();
-        } else if (moment(lastIndexUpdate.value).add(1, 'minute').isBefore(moment())) {
+            lastIndexUpdate.value = moment().utc();
+        } else if (moment.utc(lastIndexUpdate.value).add(1, 'minute').isBefore(moment().utc())) {
+            lastIndexUpdate.value = moment().utc();
             rollIndex();
         }
 
         return group.mascots[currentIndex.value];
     }
 
-    return {groups, currentGroup, currentIndex, lastIndexes, fetchUpdateAsNeeded, changeGroup, getCurrentMascot};
+    return {groups, currentGroup, currentIndex, lastIndexes, lastIndexUpdate,lastGroupUpdate, fetchUpdateAsNeeded, changeGroup, getCurrentMascot};
 }, {
     persist: true
 });

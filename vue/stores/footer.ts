@@ -2,8 +2,8 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import moment from "moment";
 
-export const useTitleStore = defineStore('title', () => {
-    const titles = ref([]);
+export const useFooterStore = defineStore('footer', () => {
+    const links = ref([]);
     const lastUpdate = ref(null);
 
     async function fetchUpdateAsNeeded() {
@@ -13,15 +13,11 @@ export const useTitleStore = defineStore('title', () => {
             return;
         }
 
-        const response = await fetch('/api/page-titles');
-        titles.value = await response.json();
+        const response = await fetch('/api/footer-links');
+        links.value = await response.json();
     }
 
-    function getTitle() {
-        return titles.value.length ? titles.value[Math.floor(Math.random() * titles.value.length)] : '~';
-    }
-
-    return {lastUpdate, titles, getTitle, fetchUpdateAsNeeded};
+    return {lastUpdate, links, fetchUpdateAsNeeded};
 }, {
     persist: true
 });

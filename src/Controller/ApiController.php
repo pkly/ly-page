@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Rss\Result;
+use App\Repository\FooterLinkRepository;
+use App\Repository\LinkBlockRepository;
 use App\Repository\Rss\ResultRepository;
 use App\Service\MascotService;
 use App\Service\QBitTorrentService;
@@ -67,5 +69,27 @@ class ApiController extends AbstractController
         SplashTitleService $service
     ): JsonResponse {
         return $this->json($service->getTitles());
+    }
+
+    #[Route('/footer-links', name: 'footer_links', methods: ['GET'])]
+    public function getFooterLinks(
+        FooterLinkRepository $repository
+    ): JsonResponse {
+        return $this->json($repository->findBy([], ['priority' => 'DESC']), context: [
+            AbstractNormalizer::GROUPS => [
+                'api',
+            ],
+        ]);
+    }
+
+    #[Route('/link-blocks', name: 'link_blocks', methods: ['GET'])]
+    public function getLinkBlocks(
+        LinkBlockRepository $repository
+    ): JsonResponse {
+        return $this->json($repository->findAll(), context: [
+            AbstractNormalizer::GROUPS => [
+                'api',
+            ],
+        ]);
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="header-block mb-3 pb-3 px-3 border-bottom border-info-subtle">
         <header>
             <slot name="header"/>
         </header>

@@ -37,9 +37,14 @@ class Result
     #[Groups('api')]
     private Search|null $search;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['default' => 'NOW()'])]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups('api')]
     private \DateTimeImmutable|null $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): int|null
     {

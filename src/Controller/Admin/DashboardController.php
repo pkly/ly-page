@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\FooterLink;
+use App\Entity\LinkBlock;
 use App\Entity\MascotGroup;
 use App\Entity\Rss\Group;
 use App\Entity\Rss\Result;
@@ -38,6 +40,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Groups', 'fa fa-home', Group::class);
         yield MenuItem::linkToCrud('Results', 'fa fa-home', Result::class);
         yield MenuItem::linkToCrud('Searches', 'fa fa-home', Search::class);
+
+        yield MenuItem::section();
+
+        yield MenuItem::linkToCrud('Link blocks', 'fa fa-home', LinkBlock::class);
+        yield MenuItem::linkToCrud('Footer links', 'fa fa-home', FooterLink::class);
     }
 
     public function configureCrud(): Crud
