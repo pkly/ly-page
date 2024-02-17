@@ -9,6 +9,7 @@ use App\Repository\Rss\ResultRepository;
 use App\Service\MascotService;
 use App\Service\QBitTorrentService;
 use App\Service\SplashTitleService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +41,8 @@ class ApiController extends AbstractController
     public function downloadRss(
         QBitTorrentService $service,
         Result $result,
-        ResultRepository $repository
+        ResultRepository $repository,
+        EntityManagerInterface $em
     ): Response {
         if (!$service->addTorrent($result)) {
             return new Response(status: Response::HTTP_FORBIDDEN);
@@ -51,6 +53,7 @@ class ApiController extends AbstractController
 
         while ($attempts > 0) {
             $attempts--;
+            $em->clear();
 
             if (null === ($result = $repository->find($result->getId()))) {
                 return new Response(status: Response::HTTP_NOT_FOUND);
@@ -59,6 +62,8 @@ class ApiController extends AbstractController
             if (null !== $result->getSeenAt()) {
                 return new Response();
             }
+
+            sleep(1);
         }
 
         return new Response(status: Response::HTTP_TOO_MANY_REQUESTS);

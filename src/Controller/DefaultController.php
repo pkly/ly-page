@@ -2,16 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\MascotGroup;
 use App\Entity\Rss\Result;
-use App\Enum\SessionOptions;
-use App\Repository\MascotGroupRepository;
-use App\Repository\Rss\ResultRepository;
 use App\Service\MascotService;
 use App\Service\QBitTorrentService;
-use App\Service\SplashTitleService;
 use App\Traits\EntityManagerTrait;
-use App\Traits\SessionTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,13 +18,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DefaultController extends AbstractController
 {
-    use SessionTrait;
     use EntityManagerTrait;
 
-    public const int MASCOT_UPDATE_IN_SECONDS = 60;
-
     public function __construct(
-        private readonly ResultRepository $resultRepository,
         private readonly HttpClientInterface $client
     ) {
     }
@@ -45,48 +35,9 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/', name: 'front.index')]
-    public function index(
-        string $BASE_TEMPLATE,
-        MascotService $mascotService,
-        SplashTitleService $splashTitleService,
-        MascotGroupRepository $mascotGroupRepository
-    ): Response {
-        /** @var MascotGroup|null $group */
-        $group = $this->getSession()?->get(SessionOptions::MASCOT_GROUP->value, $mascotGroupRepository->getDefault()) ?? $mascotGroupRepository->getDefault();
-        // since we cannot really cache the SplInfo, we'll just fetch the last count
-        $lastUpdate = $this->getSession()?->get(SessionOptions::LAST_MASCOT_UPDATE->value);
-        $counter = $this->getSession()?->get(SessionOptions::MASCOT_COUNTER->value, 0) ?? 0;
-
-        $mascot = $mascotService->getMascot(
-            $counter,
-            $group?->getDirectories() ?? []
-        );
-
-        if (null === $lastUpdate) {
-            $this->getSession()?->set(SessionOptions::LAST_MASCOT_UPDATE->value, $lastUpdate = time());
-        }
-
-        if ($lastUpdate + self::MASCOT_UPDATE_IN_SECONDS < time()) {
-            $counter++;
-
-            if ($counter >= $mascotService->getLastMascotCount()) {
-                $counter = 0; // reset counter
-            }
-
-            $this->getSession()?->set(SessionOptions::MASCOT_COUNTER->value, $counter);
-            $this->getSession()?->set(SessionOptions::LAST_MASCOT_UPDATE->value, time());
-        }
-
-        return $this->render(
-            'homepage.html.twig',
-            [
-                'body_title' => $splashTitleService->getTitle(),
-                'mascot' => $mascot,
-                'mascot_groups' => $mascotGroupRepository->findAll(),
-                'mascot_group' => $group,
-                'rss_results' => $this->resultRepository->findBy(['seenAt' => null], ['id' => 'ASC'], 10),
-            ]
-        );
+    public function index(): Response
+    {
+        return $this->render('homepage.html.twig');
     }
 
     #[Route('/recache-mascots', name: 'front.recache_mascots')]
@@ -123,24 +74,6 @@ class DefaultController extends AbstractController
         if (!$service->addTorrent($file)) {
             return new Response('Failed to add new torrent via api', 500);
         }
-
-        return $this->redirectToRoute('front.index');
-    }
-
-    #[Route('/mark-all-as-seen', name: 'front.mark_all_as_seen')]
-    public function setAllAsSeen(): RedirectResponse
-    {
-        $this->resultRepository->setAllAsSeen();
-
-        return $this->redirectToRoute('front.index');
-    }
-
-    #[Route('/set-mascot-group/{group}', name: 'front.set_mascot_group')]
-    public function setMascotGroup(
-        MascotGroup|null $group
-    ): RedirectResponse {
-        $this->getSession()?->set(SessionOptions::MASCOT_GROUP->value, $group);
-        $this->getSession()?->set(SessionOptions::MASCOT_COUNTER->value, 0);
 
         return $this->redirectToRoute('front.index');
     }
