@@ -28,7 +28,7 @@ function handleOnSuccess() {
 <template>
     <HeaderBlock v-if="data.length && !done">
         <template v-slot:header>
-            Some shit here
+            RSS results found
         </template>
         <template v-slot:default>
             <RssResult v-for="(d, i) in data" :data="d" :key="i" @onSuccess="handleOnSuccess"/>
