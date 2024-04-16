@@ -37,6 +37,15 @@ class ApiController extends AbstractController
         ]);
     }
 
+    #[Route('/mark-as-seen', name: 'mark_as_seen', methods: ['GET'])]
+    public function markAllAsFound(
+        ResultRepository $repository
+    ): Response {
+        $repository->setAllAsSeen();
+
+        return new Response();
+    }
+
     #[Route('/download-rss/{result}', name: 'download_rss', methods: ['GET'])]
     public function downloadRss(
         QBitTorrentService $service,
