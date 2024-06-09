@@ -8,6 +8,7 @@ use App\Repository\LinkBlockRepository;
 use App\Repository\Rss\ResultRepository;
 use App\Service\MascotService;
 use App\Service\QBitTorrentService;
+use App\Service\RssRefreshService;
 use App\Service\SplashTitleService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,15 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 #[Route('/api', name: 'api.')]
 class ApiController extends AbstractController
 {
+    #[Route('/refresh-rss', name: 'refresh_rss', methods: ['GET'])]
+    public function refreshRss(
+        RssRefreshService $refreshService
+    ): Response {
+        $refreshService->refresh();
+
+        return new Response();
+    }
+
     #[Route('/mascot-groups', name: 'mascot_groups', methods: ['GET'])]
     public function getMascotGroups(
         MascotService $service
