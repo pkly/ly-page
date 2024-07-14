@@ -6,7 +6,7 @@ framework:
 
     http_client:
         default_options:
-            proxy: '%env(default::PROXY_HTTP_URL)%'
+            proxy: '%env(string:default::PROXY_HTTP_URL)%'
             no_proxy: '%env(string:default:EMPTY:NO_PROXY_HOSTS)%'
 
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
