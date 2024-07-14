@@ -7,7 +7,7 @@ framework:
     http_client:
         default_options:
             proxy: '%env(default::PROXY_HTTP_URL)'
-            no_proxy: '%env(default:NO_PROXY_HOSTS:string:EMPTY)%'
+            no_proxy: '%env(default:string:NO_PROXY_HOSTS:string:EMPTY)%'
 
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
     # Remove or comment this section to explicitly disable session support.
