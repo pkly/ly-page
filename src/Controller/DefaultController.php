@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Rss\Result;
 use App\Service\MascotService;
 use App\Service\QBitTorrentService;
+use App\Service\RewriteService;
 use App\Traits\EntityManagerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -51,9 +52,10 @@ class DefaultController extends AbstractController
 
     #[Route('/proxy/{file}', name: 'front.file_proxy')]
     public function proxy(
-        Result $file
+        Result $file,
+        RewriteService $rewriteService
     ): Response {
-        $response = $this->client->request('GET', $file->getUrl());
+        $response = $this->client->request('GET', $rewriteService->rewrite($file->getUrl()));
 
         if (Response::HTTP_OK !== $response->getStatusCode()) {
             return new Response('Failed to download file', 500);
