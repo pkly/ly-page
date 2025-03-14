@@ -1,8 +1,0 @@
-default:
-    resource: ../src/Controller/
-    type: attribute
-
-admin:
-    resource: ../src/Controller/Admin/
-    type: attribute
-    prefix: /admin
