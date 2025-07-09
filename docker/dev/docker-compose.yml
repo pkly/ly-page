@@ -1,0 +1,39 @@
+version: "3"
+services:
+
+  lypage_php_dev:
+    container_name: lypage_php_dev
+    build:
+      context: ./php
+    environment:
+      - DATABASE_URL=mysql://lypage:lypage@127.0.0.1:3306/lypage?serverVersion=11.7.2-MariaDB
+    volumes:
+      - ../../:/var/www
+      - ./php/ini/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./php/ini/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      - ./php/conf/php-fpm-custom.conf:/usr/local/etc/php-fpm.d/zz-php-fpm-custom.conf:ro
+
+  lypage_nginx:
+    container_name: lypage_nginx
+    image: nginx:alpine
+    volumes:
+      - ../../:/var/www
+      - ./nginx/dev.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites:/etc/nginx/sites-available
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "80:80"
+
+  lypage_mariadb:
+    container_name: lypage_mariadb
+    image: mariadb:11.7.2
+    environment:
+      - MARIADB_USER=lypage
+      - MARIADB_PASSWORD=lypage
+      - MARIADB_DATABASE=lypage
+      - MARIADB_ROOT_PASSWORD=lypage
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"

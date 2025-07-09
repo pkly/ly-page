@@ -1,0 +1,24 @@
+version: "3"
+services:
+  lypage_app:
+    container_name: lypage_app
+    image: ghcr.io/pkly/ly-page/lypage-app:latest
+    environment:
+      - DATABASE_URL=mysql://lypage:lypage@127.0.0.1:3306/lypage?serverVersion=11.7.2-MariaDB
+    ports:
+      - "80:80"
+    depends_on:
+      - lypage_mariadb_prod
+
+  lypage_postgres_prod:
+    container_name: lypage_mariadb_prod
+    image: mariadb:11.7.2
+    environment:
+      - MARIADB_USER=lypage
+      - MARIADB_PASSWORD=lypage
+      - MARIADB_DATABASE=lypage
+      - MARIADB_ROOT_PASSWORD=lypage
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"

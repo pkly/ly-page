@@ -1,7 +1,7 @@
 /.idea
 /docker/dev/logs
-/docker/dev/postgreslib
-/docker/build/postgreslib
+/docker/dev/mariadb
+/docker/build/mariadb
 node_modules
 .php-cs-fixer.cache
 /local

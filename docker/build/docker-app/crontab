@@ -1,0 +1,1 @@
+0 18 * * * /var/www/bin/console app:cron-search
