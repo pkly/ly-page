@@ -14,6 +14,7 @@ RUN docker-php-ext-install curl
 RUN docker-php-ext-install sockets
 RUN docker-php-ext-install bcmath
 RUN docker-php-ext-install opcache
+RUN docker-php-ext-install pdo_mysql
 
 # install composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

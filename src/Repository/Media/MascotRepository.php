@@ -16,28 +16,13 @@ class MascotRepository extends ServiceEntityRepository
         parent::__construct($registry, Mascot::class);
     }
 
-//    /**
-//     * @return Mascot[] Returns an array of Mascot objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getAllPaths(): array
+    {
+        $results = $this->createQueryBuilder('m')
+            ->select('m.path')
+            ->getQuery()
+            ->getArrayResult();
 
-//    public function findOneBySomeField($value): ?Mascot
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return array_column($results, 'path');
+    }
 }

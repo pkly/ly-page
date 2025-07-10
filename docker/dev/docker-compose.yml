@@ -6,12 +6,13 @@ services:
     build:
       context: ./php
     environment:
-      - DATABASE_URL=mysql://lypage:lypage@127.0.0.1:3306/lypage?serverVersion=11.7.2-MariaDB
+      - DATABASE_URL=mysql://lypage:lypage@lypage_mariadb:3306/lypage?serverVersion=11.7.2-MariaDB
     volumes:
       - ../../:/var/www
       - ./php/ini/custom.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./php/ini/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
       - ./php/conf/php-fpm-custom.conf:/usr/local/etc/php-fpm.d/zz-php-fpm-custom.conf:ro
+      - ../../local-mnt:/var/www/public/mascots:ro
 
   lypage_nginx:
     container_name: lypage_nginx
@@ -22,6 +23,7 @@ services:
       - ./nginx/sites:/etc/nginx/sites-available
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx
+      - ../../local-mnt:/var/www/public/mascots:ro
     ports:
       - "80:80"
 

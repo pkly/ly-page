@@ -24,6 +24,9 @@ class Wallpaper
     #[ORM\Column(length: 2048)]
     private ?string $path = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $ext = null;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -66,6 +69,18 @@ class Wallpaper
     public function setPath(string $path): static
     {
         $this->path = $path;
+
+        return $this;
+    }
+
+    public function getExt(): ?string
+    {
+        return $this->ext;
+    }
+
+    public function setExt(string $ext): static
+    {
+        $this->ext = $ext;
 
         return $this;
     }

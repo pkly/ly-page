@@ -24,6 +24,11 @@ class Tag
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $meta = null;
 
+    public function __toString(): string
+    {
+        return $this->getTitle().' - '.$this->getTagGroup()->getTitle();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

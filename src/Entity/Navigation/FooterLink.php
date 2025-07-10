@@ -21,7 +21,7 @@ class FooterLink
     private ?string $title = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $priority = null;
+    private ?int $priority = 0;
 
     public function getId(): ?int
     {

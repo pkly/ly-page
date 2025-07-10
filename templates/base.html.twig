@@ -1,17 +1,50 @@
+{% import 'macro.html.twig' as macro %}
 <!DOCTYPE html>
-<html>
+<html lang="en" data-bs-theme="dark">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-reboot.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}" />
         {% endblock %}
 
         {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="py-4 px-md-4">
+        <div class="container-fluid d-flex flex-column h-100">
+            <header class="mb-4 header-main">{{ header }}</header>
+            <div class="row flex-grow-1">
+                <div class="col-12 col-md-6">
+                    {% for block in blocks %}
+                        <div class="header-block mb-3 pb-3 px-3 border-bottom border-info-subtle link-block">
+                            <header class="mb-3">
+                                {{ block.title }}
+                                <small>{{ block.description }}</small>
+                            </header>
+                            <div>
+                                {% for link in block.links %}
+                                    <a href="{{ link.url|raw }}" class="btn btn-sm btn-outline-info">
+                                        {{ link.title }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-12 col-md-6 mascot-container">
+                    {% if mascot %}
+                        {{ macro.mascot(mascot.path, mascot.ext) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <footer>
+            {% for link in footerLinks %}
+                <a href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
+        </footer>
     </body>
 </html>

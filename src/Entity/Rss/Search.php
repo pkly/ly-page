@@ -39,6 +39,11 @@ class Search
         $this->results = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getQuery().' in '.$this->getSource()->getName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

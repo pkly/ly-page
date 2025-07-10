@@ -1,0 +1,9 @@
+{% extends '@EasyAdmin/crud/new.html.twig' %}
+
+{% block main %}
+    {% import 'macro.html.twig' as macro %}
+
+    {{ macro.mascot(newMascotPath, newMascotExt) }}
+
+    {{ parent() }}
+{% endblock %}

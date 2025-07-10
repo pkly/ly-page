@@ -49,6 +49,9 @@ coverage
 
 /public/vue/
 
+/local-mnt
+/public/mascots
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

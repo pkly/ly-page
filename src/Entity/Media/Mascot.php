@@ -15,9 +15,6 @@ class Mascot
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?bool $defaultGroup = null;
-
     #[ORM\Column(length: 2048)]
     private ?string $path = null;
 
@@ -27,6 +24,9 @@ class Mascot
     #[ORM\ManyToMany(targetEntity: Tag::class)]
     private Collection $tags;
 
+    #[ORM\Column(length: 255)]
+    private ?string $ext = null;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -35,18 +35,6 @@ class Mascot
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function isDefaultGroup(): ?bool
-    {
-        return $this->defaultGroup;
-    }
-
-    public function setDefaultGroup(bool $defaultGroup): static
-    {
-        $this->defaultGroup = $defaultGroup;
-
-        return $this;
     }
 
     public function getPath(): ?string
@@ -81,6 +69,18 @@ class Mascot
     public function removeTag(Tag $tag): static
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getExt(): ?string
+    {
+        return $this->ext;
+    }
+
+    public function setExt(string $ext): static
+    {
+        $this->ext = $ext;
 
         return $this;
     }
