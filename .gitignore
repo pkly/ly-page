@@ -50,7 +50,9 @@ coverage
 /public/vue/
 
 /local-mnt
+/local-wall-mnt
 /public/mascots
+/public/walls
 
 # Editor directories and files
 .vscode/*

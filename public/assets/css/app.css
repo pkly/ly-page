@@ -50,3 +50,13 @@ body {
     width: 100px;
     border: 0;
 }
+
+.rss-link {
+    text-align: left;
+}
+
+.rss-link > small {
+    display: block;
+    text-align: right;
+    font-size: 0.8rem;
+}

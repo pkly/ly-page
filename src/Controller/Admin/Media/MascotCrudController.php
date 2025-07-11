@@ -36,7 +36,7 @@ class MascotCrudController extends AbstractCrudController
     public function configureCrud(
         Crud $crud
     ): Crud {
-        return $crud->overrideTemplate('crud/new', 'admin/entity/mascot.add.html.twig');
+        return $crud->overrideTemplate('crud/new', 'admin/entity/image.add.html.twig');
     }
 
     public function configureFields(
@@ -91,8 +91,8 @@ class MascotCrudController extends AbstractCrudController
     public function configureResponseParameters(
         KeyValueStore $responseParameters
     ): KeyValueStore {
-        $responseParameters->set('newMascotPath', $this->newMascotPath);
-        $responseParameters->set('newMascotExt', $this->newMascotExt);
+        $responseParameters->set('newImagePath', $this->newMascotPath);
+        $responseParameters->set('newImageExt', $this->newMascotExt);
 
         return $responseParameters;
     }

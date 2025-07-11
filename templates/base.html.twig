@@ -16,8 +16,40 @@
     <body class="py-4 px-md-4">
         <div class="container-fluid d-flex flex-column h-100">
             <header class="mb-4 header-main">{{ header }}</header>
+            {% if alert|length %}
+                <div class="alert alert-info">
+                    {{ alert }}
+                </div>
+            {% endif %}
             <div class="row flex-grow-1">
                 <div class="col-12 col-md-6">
+                    {% if rssResults is not empty %}
+                        <div class="rss-block mb-3 pb-3 px-3 border-bottom border-success-subtle">
+                            <header class="mb-3">
+                                <div class="row">
+                                    <div class="col-9">
+                                        RSS Results
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <a href="{{ path('front.set_all_as_seen') }}" class="btn btn-sm btn-outline-secondary">
+                                            Seen all
+                                        </a>
+                                    </div>
+                                </div>
+                            </header>
+                            <div>
+                                {% for result in rssResults %}
+                                    <a href="{{ path('front.rss_result_start', {rss: result.id}) }}" class="d-block btn btn-outline-secondary rss-link">
+                                        {{ result.title }}
+                                        <small>
+                                            {{ result.createdAt|date('d-m-Y H:i:s') }} |
+                                            {{ result.search.query }} - {{ result.search.source.name }}
+                                        </small>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                     {% for block in blocks %}
                         <div class="header-block mb-3 pb-3 px-3 border-bottom border-info-subtle link-block">
                             <header class="mb-3">

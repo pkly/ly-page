@@ -35,6 +35,14 @@ class Result
     #[ORM\JoinColumn(nullable: false)]
     private Search|null $search = null;
 
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private \DateTimeImmutable|null $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): int|null
     {
         return $this->id;
@@ -114,6 +122,19 @@ class Result
         Search|null $search
     ): static {
         $this->search = $search;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable|null
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(
+        \DateTimeImmutable $createdAt
+    ): static {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
