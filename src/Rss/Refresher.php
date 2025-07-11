@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rss;
 
 use App\Entity\Rss\Result;

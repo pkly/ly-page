@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin\Media;
 
 use App\Entity\Media\Mascot;
@@ -31,13 +33,15 @@ class MascotCrudController extends AbstractCrudController
         return Mascot::class;
     }
 
-    public function configureCrud(Crud $crud): Crud
-    {
+    public function configureCrud(
+        Crud $crud
+    ): Crud {
         return $crud->overrideTemplate('crud/new', 'admin/entity/mascot.add.html.twig');
     }
 
-    public function configureFields(string $pageName): iterable
-    {
+    public function configureFields(
+        string $pageName
+    ): iterable {
         yield IdField::new('id')
             ->hideOnForm();
 
@@ -49,16 +53,19 @@ class MascotCrudController extends AbstractCrudController
             ->autocomplete();
     }
 
-    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
-    {
+    public function persistEntity(
+        EntityManagerInterface $entityManager,
+        $entityInstance
+    ): void {
         $entityInstance->setPath($this->newMascotPath);
         $entityInstance->setExt($this->newMascotExt);
 
         parent::persistEntity($entityManager, $entityInstance);
     }
 
-    public function new(AdminContext $context)
-    {
+    public function new(
+        AdminContext $context
+    ) {
         $mascots = $this->repository->getAllPaths();
 
         // find first new path
@@ -74,14 +81,16 @@ class MascotCrudController extends AbstractCrudController
 
         if (null === $this->newMascotPath) {
             $this->addFlash('warning', 'No new mascot to add');
+
             return $this->redirectToRoute('admin_mascot_index');
         }
 
         return parent::new($context);
     }
 
-    public function configureResponseParameters(KeyValueStore $responseParameters): KeyValueStore
-    {
+    public function configureResponseParameters(
+        KeyValueStore $responseParameters
+    ): KeyValueStore {
         $responseParameters->set('newMascotPath', $this->newMascotPath);
         $responseParameters->set('newMascotExt', $this->newMascotExt);
 

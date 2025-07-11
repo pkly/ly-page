@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Handler;
 
 use App\Message\Rss\SearchNotification;
@@ -17,6 +19,5 @@ class RssSearchHandler
     public function handle(
         SearchNotification $notification
     ): void {
-
     }
 }

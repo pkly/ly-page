@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin\Media;
 
 use App\Entity\Media\Wallpaper;
@@ -13,8 +15,9 @@ class WallpaperCrudController extends AbstractCrudController
         return Wallpaper::class;
     }
 
-    public function configureFields(string $pageName): iterable
-    {
+    public function configureFields(
+        string $pageName
+    ): iterable {
         yield IdField::new('id')
             ->hideOnForm();
     }

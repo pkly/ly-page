@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin\Rss;
 
 use App\Entity\Rss\Source;
@@ -14,8 +16,9 @@ class SourceCrudController extends AbstractCrudController
         return Source::class;
     }
 
-    public function configureFields(string $pageName): iterable
-    {
+    public function configureFields(
+        string $pageName
+    ): iterable {
         yield IdField::new('id')
             ->hideOnForm();
 

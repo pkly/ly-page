@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Navigation;
 
 use App\Repository\Navigation\BlockGroupRepository;
@@ -13,13 +15,13 @@ class BlockGroup
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int|null $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    private string|null $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $description = null;
+    private string|null $description = null;
 
     /**
      * @var Collection<int, BlockLink>
@@ -37,30 +39,32 @@ class BlockGroup
         return $this->getTitle();
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string|null
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): static
-    {
+    public function setTitle(
+        string $title
+    ): static {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string|null
     {
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
-    {
+    public function setDescription(
+        string|null $description
+    ): static {
         $this->description = $description;
 
         return $this;
@@ -74,8 +78,9 @@ class BlockGroup
         return $this->links;
     }
 
-    public function addLink(BlockLink $link): static
-    {
+    public function addLink(
+        BlockLink $link
+    ): static {
         if (!$this->links->contains($link)) {
             $this->links->add($link);
             $link->setBlock($this);
@@ -84,8 +89,9 @@ class BlockGroup
         return $this;
     }
 
-    public function removeLink(BlockLink $link): static
-    {
+    public function removeLink(
+        BlockLink $link
+    ): static {
         if ($this->links->removeElement($link)) {
             // set the owning side to null (unless already changed)
             if ($link->getBlock() === $this) {

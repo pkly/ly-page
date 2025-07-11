@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Rss;
 
 use App\Repository\Rss\SearchRepository;
@@ -13,20 +15,20 @@ class Search
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int|null $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Source $source = null;
+    private Source|null $source = null;
 
     #[ORM\Column(length: 1024)]
-    private ?string $query = null;
+    private string|null $query = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $directory = null;
+    private string|null $directory = null;
 
     #[ORM\Column]
-    private ?bool $active = null;
+    private bool|null $active = null;
 
     /**
      * @var Collection<int, Result>
@@ -44,54 +46,58 @@ class Search
         return $this->getQuery().' in '.$this->getSource()->getName();
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getSource(): ?Source
+    public function getSource(): Source|null
     {
         return $this->source;
     }
 
-    public function setSource(?Source $source): static
-    {
+    public function setSource(
+        Source|null $source
+    ): static {
         $this->source = $source;
 
         return $this;
     }
 
-    public function getQuery(): ?string
+    public function getQuery(): string|null
     {
         return $this->query;
     }
 
-    public function setQuery(string $query): static
-    {
+    public function setQuery(
+        string $query
+    ): static {
         $this->query = $query;
 
         return $this;
     }
 
-    public function getDirectory(): ?string
+    public function getDirectory(): string|null
     {
         return $this->directory;
     }
 
-    public function setDirectory(string $directory): static
-    {
+    public function setDirectory(
+        string $directory
+    ): static {
         $this->directory = $directory;
 
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function isActive(): bool|null
     {
         return $this->active;
     }
 
-    public function setActive(bool $active): static
-    {
+    public function setActive(
+        bool $active
+    ): static {
         $this->active = $active;
 
         return $this;
@@ -105,8 +111,9 @@ class Search
         return $this->results;
     }
 
-    public function addResult(Result $result): static
-    {
+    public function addResult(
+        Result $result
+    ): static {
         if (!$this->results->contains($result)) {
             $this->results->add($result);
             $result->setSearch($this);
@@ -115,8 +122,9 @@ class Search
         return $this;
     }
 
-    public function removeResult(Result $result): static
-    {
+    public function removeResult(
+        Result $result
+    ): static {
         if ($this->results->removeElement($result)) {
             // set the owning side to null (unless already changed)
             if ($result->getSearch() === $this) {

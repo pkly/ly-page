@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin\Rss;
 
 use App\Entity\Rss\Result;
@@ -16,8 +18,9 @@ class ResultCrudController extends AbstractCrudController
         return Result::class;
     }
 
-    public function configureFields(string $pageName): iterable
-    {
+    public function configureFields(
+        string $pageName
+    ): iterable {
         yield IdField::new('id')
             ->hideOnForm();
 
@@ -28,22 +31,3 @@ class ResultCrudController extends AbstractCrudController
         yield AssociationField::new('search');
     }
 }
-
-//    #[ORM\Column(length: 2048)]
-//    private ?string $url = null;
-//
-//    #[ORM\Column(length: 2048)]
-//    private ?string $title = null;
-//
-//    #[ORM\Column]
-//    private array $data = [];
-//
-//    #[ORM\Column(type: Types::GUID)]
-//    private ?string $guid = null;
-//
-//    #[ORM\Column(nullable: true)]
-//    private ?\DateTimeImmutable $seenAt = null;
-//
-//    #[ORM\ManyToOne(inversedBy: 'results')]
-//    #[ORM\JoinColumn(nullable: false)]
-//    private ?Search $search = null;

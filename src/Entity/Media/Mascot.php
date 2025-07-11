@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Media;
 
 use App\Repository\Media\MascotRepository;
@@ -13,10 +15,10 @@ class Mascot
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int|null $id = null;
 
     #[ORM\Column(length: 2048)]
-    private ?string $path = null;
+    private string|null $path = null;
 
     /**
      * @var Collection<int, Tag>
@@ -25,25 +27,26 @@ class Mascot
     private Collection $tags;
 
     #[ORM\Column(length: 255)]
-    private ?string $ext = null;
+    private string|null $ext = null;
 
     public function __construct()
     {
         $this->tags = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
 
-    public function getPath(): ?string
+    public function getPath(): string|null
     {
         return $this->path;
     }
 
-    public function setPath(string $path): static
-    {
+    public function setPath(
+        string $path
+    ): static {
         $this->path = $path;
 
         return $this;
@@ -57,8 +60,9 @@ class Mascot
         return $this->tags;
     }
 
-    public function addTag(Tag $tag): static
-    {
+    public function addTag(
+        Tag $tag
+    ): static {
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
         }
@@ -66,20 +70,22 @@ class Mascot
         return $this;
     }
 
-    public function removeTag(Tag $tag): static
-    {
+    public function removeTag(
+        Tag $tag
+    ): static {
         $this->tags->removeElement($tag);
 
         return $this;
     }
 
-    public function getExt(): ?string
+    public function getExt(): string|null
     {
         return $this->ext;
     }
 
-    public function setExt(string $ext): static
-    {
+    public function setExt(
+        string $ext
+    ): static {
         $this->ext = $ext;
 
         return $this;

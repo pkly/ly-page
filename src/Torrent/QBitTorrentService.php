@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Torrent;
 
 use App\Entity\Rss\Result;

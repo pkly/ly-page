@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin\Navigation;
 
 use App\Entity\Navigation\FooterLink;
@@ -15,8 +17,9 @@ class FooterLinkCrudController extends AbstractCrudController
         return FooterLink::class;
     }
 
-    public function configureFields(string $pageName): iterable
-    {
+    public function configureFields(
+        string $pageName
+    ): iterable {
         yield IdField::new('id')
             ->hideOnForm();
 

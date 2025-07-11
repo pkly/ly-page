@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Media;
 
 use App\Repository\Media\MascotGroupRepository;
@@ -13,7 +15,7 @@ class MascotGroup
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int|null $id = null;
 
     /**
      * @var Collection<int, Tag>
@@ -22,17 +24,17 @@ class MascotGroup
     private Collection $tags;
 
     #[ORM\Column(options: ['default' => false])]
-    private ?bool $defaultGroup = false;
+    private bool|null $defaultGroup = false;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    private string|null $title = null;
 
     public function __construct()
     {
         $this->tags = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
@@ -45,8 +47,9 @@ class MascotGroup
         return $this->tags;
     }
 
-    public function addTag(Tag $tag): static
-    {
+    public function addTag(
+        Tag $tag
+    ): static {
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
         }
@@ -54,32 +57,35 @@ class MascotGroup
         return $this;
     }
 
-    public function removeTag(Tag $tag): static
-    {
+    public function removeTag(
+        Tag $tag
+    ): static {
         $this->tags->removeElement($tag);
 
         return $this;
     }
 
-    public function isDefaultGroup(): ?bool
+    public function isDefaultGroup(): bool|null
     {
         return $this->defaultGroup;
     }
 
-    public function setDefaultGroup(bool $defaultGroup): static
-    {
+    public function setDefaultGroup(
+        bool $defaultGroup
+    ): static {
         $this->defaultGroup = $defaultGroup;
 
         return $this;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string|null
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): static
-    {
+    public function setTitle(
+        string $title
+    ): static {
         $this->title = $title;
 
         return $this;
