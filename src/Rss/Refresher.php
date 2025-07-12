@@ -24,6 +24,10 @@ class Refresher
     public function refresh(
         Search $search
     ): false|int {
+        $this->em->persist(
+            $search->setLastSearchedAt(new \DateTime())
+        );
+
         $response = $this->client->request(
             'GET',
             sprintf($search->getSource()->getUrl(), urlencode($search->getQuery()))
@@ -35,6 +39,8 @@ class Refresher
                 'source' => $search->getSource()->getName(),
                 'id' => $search->getId(),
             ]);
+
+            $this->em->flush();
 
             return false;
         }
@@ -61,10 +67,14 @@ class Refresher
                 ->setSearch($search);
 
             $this->em->persist($found);
-            $this->em->flush();
-
             $count++;
         }
+
+        if ($count) {
+            $search->setLastFoundAt(new \DateTime());
+        }
+
+        $this->em->flush();
 
         return $count;
     }

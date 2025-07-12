@@ -36,6 +36,12 @@ class Search
     #[ORM\OneToMany(targetEntity: Result::class, mappedBy: 'search', orphanRemoval: true)]
     private Collection $results;
 
+    #[ORM\Column(nullable: true)]
+    private \DateTime|null $lastSearchedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private \DateTime|null $lastFoundAt = null;
+
     public function __construct()
     {
         $this->results = new ArrayCollection();
@@ -131,6 +137,32 @@ class Search
                 $result->setSearch(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastSearchedAt(): \DateTime|null
+    {
+        return $this->lastSearchedAt;
+    }
+
+    public function setLastSearchedAt(
+        \DateTime|null $lastSearchedAt
+    ): static {
+        $this->lastSearchedAt = $lastSearchedAt;
+
+        return $this;
+    }
+
+    public function getLastFoundAt(): \DateTime|null
+    {
+        return $this->lastFoundAt;
+    }
+
+    public function setLastFoundAt(
+        \DateTime|null $lastFoundAt
+    ): static {
+        $this->lastFoundAt = $lastFoundAt;
 
         return $this;
     }

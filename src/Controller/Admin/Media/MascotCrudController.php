@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Controller\Admin\Media;
 
 use App\Entity\Media\Mascot;
+use App\Mascot\MascotProvider;
+use App\Repository\Media\MascotGroupRepository;
 use App\Repository\Media\MascotRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -24,7 +26,9 @@ class MascotCrudController extends AbstractCrudController
 
     public function __construct(
         #[Autowire(param: 'kernel.project_dir')] private readonly string $projectDir,
-        private readonly MascotRepository $repository
+        private readonly MascotRepository $repository,
+        private readonly MascotGroupRepository $mascotGroupRepository,
+        private readonly MascotProvider $provider
     ) {
     }
 
@@ -61,6 +65,17 @@ class MascotCrudController extends AbstractCrudController
         $entityInstance->setExt($this->newMascotExt);
 
         parent::persistEntity($entityManager, $entityInstance);
+
+        $this->refreshMascots();
+    }
+
+    public function updateEntity(
+        EntityManagerInterface $entityManager,
+        $entityInstance
+    ): void {
+        parent::updateEntity($entityManager, $entityInstance);
+
+        $this->refreshMascots();
     }
 
     public function new(
@@ -95,5 +110,12 @@ class MascotCrudController extends AbstractCrudController
         $responseParameters->set('newImageExt', $this->newMascotExt);
 
         return $responseParameters;
+    }
+
+    private function refreshMascots(): void
+    {
+        foreach ($this->mascotGroupRepository->findAll() as $group) {
+            $this->provider->update($group);
+        }
     }
 }

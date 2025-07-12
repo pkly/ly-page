@@ -8,8 +8,6 @@ COPY . /var/www
 RUN rm -rf /var/www/docker
 
 # setup environment for symfony
-ENV MASCOT_PATH '%kernel.project_path%/empty'
-ENV ADDITIONAL_TEMPLATE_PATH '%kernel.project_path%/empty'
 ENV APP_ENV prod
 
 # setup nginx

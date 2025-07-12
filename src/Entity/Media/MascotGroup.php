@@ -23,9 +23,6 @@ class MascotGroup
     #[ORM\ManyToMany(targetEntity: Tag::class)]
     private Collection $tags;
 
-    #[ORM\Column(options: ['default' => false])]
-    private bool|null $defaultGroup = false;
-
     #[ORM\Column(length: 255)]
     private string|null $title = null;
 
@@ -61,19 +58,6 @@ class MascotGroup
         Tag $tag
     ): static {
         $this->tags->removeElement($tag);
-
-        return $this;
-    }
-
-    public function isDefaultGroup(): bool|null
-    {
-        return $this->defaultGroup;
-    }
-
-    public function setDefaultGroup(
-        bool $defaultGroup
-    ): static {
-        $this->defaultGroup = $defaultGroup;
 
         return $this;
     }

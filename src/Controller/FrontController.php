@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Media\MascotGroup;
 use App\Entity\Rss\Result;
-use App\Repository\Media\MascotRepository;
+use App\Mascot\MascotProvider;
+use App\Repository\Media\MascotGroupRepository;
 use App\Repository\Navigation\BlockGroupRepository;
 use App\Repository\Navigation\FooterLinkRepository;
 use App\Repository\Rss\ResultRepository;
@@ -25,16 +27,30 @@ class FrontController extends AbstractController
         Request $request,
         BlockGroupRepository $blockGroupRepository,
         FooterLinkRepository $footerLinkRepository,
-        MascotRepository $mascotRepository,
-        ResultRepository $resultRepository
+        ResultRepository $resultRepository,
+        MascotGroupRepository $mascotGroupRepository,
+        MascotProvider $provider
     ): Response {
+        $mascotGroups = $mascotGroupRepository->findAll();
+        $currentGroup = $mascotGroups[0] ?? null;
         $flash = null;
 
+        // honestly all of this is kind of really garbage but at this time I don't really care lmao
         try {
             $session = $request->getSession();
 
             if ($session instanceof FlashBagAwareSessionInterface) {
                 $flash = $session->getFlashBag()->get('info')[0] ?? null;
+            }
+
+            if (null !== ($mascotGroupId = $session->get('mascotGroupId'))) {
+                $mascotGroupId = (int)$mascotGroupId;
+
+                foreach ($mascotGroups as $group) {
+                    if ($group->getId() === $mascotGroupId) {
+                        $currentGroup = $group;
+                    }
+                }
             }
         } catch (SessionNotFoundException) {
         }
@@ -45,7 +61,9 @@ class FrontController extends AbstractController
             'rssResults' => $resultRepository->findBy(['seenAt' => null]),
             'blocks' => $blockGroupRepository->findAll(),
             'footerLinks' => $footerLinkRepository->findBy([], orderBy: ['priority' => 'DESC']),
-            'mascot' => $mascotRepository->findOneBy([]),
+            'mascot' => null !== $currentGroup ? $provider->get($currentGroup) : null,
+            'currentMascotGroup' => $currentGroup,
+            'mascotGroups' => $mascotGroups,
         ]);
     }
 
@@ -55,6 +73,16 @@ class FrontController extends AbstractController
     ): RedirectResponse {
         $repository->setAllAsSeen();
         $this->addFlash('info', 'Marked all as seen');
+
+        return $this->redirectToRoute('front.index');
+    }
+
+    #[Route('/mascot/set/{group}', name: 'front.mascot_set', methods: ['GET'])]
+    public function setMascotGroup(
+        MascotGroup $group,
+        Request $request
+    ): RedirectResponse {
+        $request->getSession()->set('mascotGroupId', $group->getId());
 
         return $this->redirectToRoute('front.index');
     }

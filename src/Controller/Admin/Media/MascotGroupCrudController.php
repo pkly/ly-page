@@ -7,7 +7,6 @@ namespace App\Controller\Admin\Media;
 use App\Entity\Media\MascotGroup;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -28,7 +27,5 @@ class MascotGroupCrudController extends AbstractCrudController
 
         yield AssociationField::new('tags')
             ->autocomplete();
-
-        yield BooleanField::new('defaultGroup', 'Default');
     }
 }
