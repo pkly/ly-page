@@ -2,9 +2,9 @@
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
-if ! command -v docker-compose &> /dev/null
+if ! command -v docker compose &> /dev/null
 then
-  echo "docker-compose not found, please install it before running this file."
+  echo "docker not found, please install it before running this file."
   exit 1
 fi
 
@@ -27,10 +27,10 @@ echo 'Building docker containers...'
 
 cd $DIR/../docker/dev
 
-docker-compose -p lypage build
+docker compose -p lypage build
 if [ $? != 0 ]; then
   echo "Build failed, cannot bring containers online."
   exit 1
 fi
 
-docker-compose -p lypage up
+docker compose -p lypage up

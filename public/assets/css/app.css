@@ -1,0 +1,62 @@
+.header-main {
+    font-size: 2.5rem;
+}
+
+.header-block > header {
+    font-size: 1.2rem;
+}
+
+.header-block > header > small {
+    display: block;
+    font-size: .7rem;
+}
+
+footer {
+    text-align: center;
+    height: 35px;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+footer > a {
+    display: inline-block;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    color: var(--bs-secondary);
+    font-size: .8rem;
+    text-decoration: none;
+}
+
+body {
+    height: 100vh;
+}
+
+.mascot-container {
+    height: 100%;
+}
+
+.mascot {
+    object-fit: contain;
+    object-position: bottom right;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 3rem - 50px);
+}
+
+.mascot-select {
+    width: 100px;
+    border: 0;
+}
+
+.rss-link {
+    text-align: left;
+}
+
+.rss-link > small {
+    display: block;
+    text-align: right;
+    font-size: 0.8rem;
+}

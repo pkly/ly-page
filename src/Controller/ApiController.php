@@ -1,119 +1,57 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Rss\Result;
-use App\Repository\FooterLinkRepository;
-use App\Repository\LinkBlockRepository;
-use App\Repository\Rss\ResultRepository;
-use App\Service\MascotService;
-use App\Service\QBitTorrentService;
-use App\Service\RssRefreshService;
-use App\Service\SplashTitleService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[Route('/api', name: 'api.')]
 class ApiController extends AbstractController
 {
-    #[Route('/refresh-rss', name: 'refresh_rss', methods: ['GET'])]
-    public function refreshRss(
-        RssRefreshService $refreshService
-    ): Response {
-        $refreshService->refresh();
-
-        return new Response();
-    }
-
-    #[Route('/mascot-groups', name: 'mascot_groups', methods: ['GET'])]
-    public function getMascotGroups(
-        MascotService $service
-    ): JsonResponse {
-        return $this->json($service->getCachedGroups());
-    }
-
-    #[Route('/rss', name: 'rss', methods: ['GET'])]
-    public function getRssFinds(
-        ResultRepository $repository
-    ): JsonResponse {
-        return $this->json($repository->findBy(['seenAt' => null]), context: [
-            AbstractNormalizer::GROUPS => [
-                'api',
-            ],
-        ]);
-    }
-
-    #[Route('/mark-as-seen', name: 'mark_as_seen', methods: ['GET'])]
-    public function markAllAsFound(
-        ResultRepository $repository
-    ): Response {
-        $repository->setAllAsSeen();
-
-        return new Response();
-    }
-
-    #[Route('/download-rss/{result}', name: 'download_rss', methods: ['GET'])]
-    public function downloadRss(
-        QBitTorrentService $service,
-        Result $result,
-        ResultRepository $repository,
+    #[Route('/proxy/{file}', name: 'front.file_proxy')]
+    public function proxy(
+        Result $file,
+        HttpClientInterface $client,
         EntityManagerInterface $em
     ): Response {
-        if (!$service->addTorrent($result)) {
-            return new Response(status: Response::HTTP_FORBIDDEN);
+        $response = $client->request('GET', $file->getUrl());
+
+        if (Response::HTTP_OK !== $response->getStatusCode()) {
+            return new Response('Failed to download file', 500);
         }
 
-        // busy waiting to make it real
-        $attempts = 10;
+        $file->setSeenAt(new \DateTimeImmutable());
 
-        while ($attempts > 0) {
-            $attempts--;
-            $em->clear();
+        $em->persist($file);
+        $em->flush();
 
-            if (null === ($result = $repository->find($result->getId()))) {
-                return new Response(status: Response::HTTP_NOT_FOUND);
-            }
-
-            if (null !== $result->getSeenAt()) {
-                return new Response();
-            }
-
-            sleep(1);
-        }
-
-        return new Response(status: Response::HTTP_TOO_MANY_REQUESTS);
+        return $this->download($response->getContent(), 'file-'.$file->getId().'.torrent', $response->getHeaders()['content-type'][0] ?? 'text/plain');
     }
 
-    #[Route('/page-titles', name: 'page_titles', methods: ['GET'])]
-    public function getPageTitles(
-        SplashTitleService $service
-    ): JsonResponse {
-        return $this->json($service->getTitles());
-    }
+    protected function download(
+        string $contents,
+        string $filename,
+        string $mime = 'text/plain',
+        string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT
+    ): Response {
+        $response = new Response();
+        $ext = explode('.', $filename);
 
-    #[Route('/footer-links', name: 'footer_links', methods: ['GET'])]
-    public function getFooterLinks(
-        FooterLinkRepository $repository
-    ): JsonResponse {
-        return $this->json($repository->findBy([], ['priority' => 'DESC']), context: [
-            AbstractNormalizer::GROUPS => [
-                'api',
-            ],
-        ]);
-    }
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-Type', $mime);
+        $response->headers->set(
+            'Content-Disposition',
+            $response->headers->makeDisposition($disposition, $filename, 'file.'.$ext[count($ext) - 1])
+        );
 
-    #[Route('/link-blocks', name: 'link_blocks', methods: ['GET'])]
-    public function getLinkBlocks(
-        LinkBlockRepository $repository
-    ): JsonResponse {
-        return $this->json($repository->findAll(), context: [
-            AbstractNormalizer::GROUPS => [
-                'api',
-            ],
-        ]);
+        $response->setContent($contents);
+
+        return $response;
     }
 }

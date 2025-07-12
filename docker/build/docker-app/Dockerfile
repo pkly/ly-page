@@ -8,11 +8,7 @@ COPY . /var/www
 RUN rm -rf /var/www/docker
 
 # setup environment for symfony
-ENV MASCOT_PATH '%kernel.project_path%/empty'
-ENV ADDITIONAL_TEMPLATE_PATH '%kernel.project_path%/empty'
 ENV APP_ENV prod
-
-ENV DATABASE_URL postgresql://postgres:postgres@lypage_postgres/lypage?serverVersion=14.1&charset=utf8
 
 # setup nginx
 COPY docker/build/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf

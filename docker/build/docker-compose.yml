@@ -4,19 +4,21 @@ services:
     container_name: lypage_app
     image: ghcr.io/pkly/ly-page/lypage-app:latest
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@lypage_postgres_prod/lypage?serverVersion=14.1&charset=utf8
+      - DATABASE_URL=mysql://lypage:lypage@127.0.0.1:3306/lypage?serverVersion=11.7.2-MariaDB
     ports:
       - "80:80"
     depends_on:
-      - lypage_postgres_prod
+      - lypage_mariadb_prod
 
   lypage_postgres_prod:
-    container_name: lypage_postgres_prod
-    image: postgres:14.1-alpine
+    container_name: lypage_mariadb_prod
+    image: mariadb:11.7.2
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=lypage
+      - MARIADB_USER=lypage
+      - MARIADB_PASSWORD=lypage
+      - MARIADB_DATABASE=lypage
+      - MARIADB_ROOT_PASSWORD=lypage
     volumes:
-      - ./postgreslib:/var/lib/postgresql/data
+      - ./mariadb:/var/lib/mysql
     ports:
-      - "5432:5432"
+      - "3306:3306"

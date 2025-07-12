@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin\Rss;
 
 use App\Entity\Rss\Result;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -17,12 +18,6 @@ class ResultCrudController extends AbstractCrudController
         return Result::class;
     }
 
-    public function configureCrud(
-        Crud $crud
-    ): Crud {
-        return $crud->setDefaultSort(['id' => 'DESC']);
-    }
-
     public function configureFields(
         string $pageName
     ): iterable {
@@ -31,8 +26,8 @@ class ResultCrudController extends AbstractCrudController
 
         yield TextField::new('url');
         yield TextField::new('title');
+        yield TextField::new('guid');
         yield DateTimeField::new('seenAt');
-
         yield AssociationField::new('search');
     }
 }

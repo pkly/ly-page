@@ -1,47 +1,73 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Rss;
 
 use App\Repository\Rss\SearchRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
-use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: SearchRepository::class)]
-#[ORM\Table(name: 'rss__search')]
 class Search
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: Types::INTEGER)]
-    #[Groups('api')]
-    private int|null $id;
-
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Groups('api')]
-    private string|null $query;
+    #[ORM\Column]
+    private int|null $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('api')]
-    private Group|null $rssGroup;
+    private Source|null $source = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private string|null $directory;
+    #[ORM\Column(length: 1024)]
+    private string|null $query = null;
 
-    #[ORM\Column(options: ['default' => true])]
-    private bool|null $active;
+    #[ORM\Column(length: 255)]
+    private string|null $directory = null;
 
-    #[Pure]
+    #[ORM\Column]
+    private bool|null $active = null;
+
+    /**
+     * @var Collection<int, Result>
+     */
+    #[ORM\OneToMany(targetEntity: Result::class, mappedBy: 'search', orphanRemoval: true)]
+    private Collection $results;
+
+    #[ORM\Column(nullable: true)]
+    private \DateTime|null $lastSearchedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private \DateTime|null $lastFoundAt = null;
+
+    public function __construct()
+    {
+        $this->results = new ArrayCollection();
+    }
+
     public function __toString(): string
     {
-        return $this->getQuery() ?? 'Unknown';
+        return $this->getQuery().' in '.$this->getSource()->getName();
     }
 
     public function getId(): int|null
     {
         return $this->id;
+    }
+
+    public function getSource(): Source|null
+    {
+        return $this->source;
+    }
+
+    public function setSource(
+        Source|null $source
+    ): static {
+        $this->source = $source;
+
+        return $this;
     }
 
     public function getQuery(): string|null
@@ -57,26 +83,13 @@ class Search
         return $this;
     }
 
-    public function getRssGroup(): Group|null
-    {
-        return $this->rssGroup;
-    }
-
-    public function setRssGroup(
-        Group|null $rssGroup
-    ): static {
-        $this->rssGroup = $rssGroup;
-
-        return $this;
-    }
-
     public function getDirectory(): string|null
     {
         return $this->directory;
     }
 
     public function setDirectory(
-        string|null $directory
+        string $directory
     ): static {
         $this->directory = $directory;
 
@@ -89,9 +102,67 @@ class Search
     }
 
     public function setActive(
-        bool|null $active
+        bool $active
     ): static {
         $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Result>
+     */
+    public function getResults(): Collection
+    {
+        return $this->results;
+    }
+
+    public function addResult(
+        Result $result
+    ): static {
+        if (!$this->results->contains($result)) {
+            $this->results->add($result);
+            $result->setSearch($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResult(
+        Result $result
+    ): static {
+        if ($this->results->removeElement($result)) {
+            // set the owning side to null (unless already changed)
+            if ($result->getSearch() === $this) {
+                $result->setSearch(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLastSearchedAt(): \DateTime|null
+    {
+        return $this->lastSearchedAt;
+    }
+
+    public function setLastSearchedAt(
+        \DateTime|null $lastSearchedAt
+    ): static {
+        $this->lastSearchedAt = $lastSearchedAt;
+
+        return $this;
+    }
+
+    public function getLastFoundAt(): \DateTime|null
+    {
+        return $this->lastFoundAt;
+    }
+
+    public function setLastFoundAt(
+        \DateTime|null $lastFoundAt
+    ): static {
+        $this->lastFoundAt = $lastFoundAt;
 
         return $this;
     }

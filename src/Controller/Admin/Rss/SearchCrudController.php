@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin\Rss;
 
 use App\Entity\Rss\Search;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -17,20 +18,14 @@ class SearchCrudController extends AbstractCrudController
         return Search::class;
     }
 
-    public function configureCrud(
-        Crud $crud
-    ): Crud {
-        return $crud->setDefaultSort(['active' => 'DESC', 'id' => 'DESC']);
-    }
-
     public function configureFields(
         string $pageName
     ): iterable {
         yield IdField::new('id')
             ->hideOnForm();
 
+        yield AssociationField::new('source');
         yield TextField::new('query');
-        yield AssociationField::new('rssGroup');
         yield TextField::new('directory');
         yield BooleanField::new('active');
     }

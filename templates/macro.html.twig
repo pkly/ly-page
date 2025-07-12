@@ -1,0 +1,9 @@
+{% macro mascot(path, ext, allowVideoLoop = true) %}
+<div class="mascot-container">
+    {% if ext in ['png', 'jpg', 'jpeg', 'gif', 'webp'] %}
+        <img src="{{ path }}" class="mascot img-mascot" />
+    {% else %}
+        <video src="{{ path }}" {% if allowVideoLoop == true %}autoplay loop{% endif%} class="mascot video-mascot"></video>
+    {% endif %}
+</div>
+{% endmacro %}

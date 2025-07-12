@@ -1,44 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Rss;
 
 use App\Repository\Rss\ResultRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ResultRepository::class)]
-#[ORM\Table(name: 'rss__result')]
 class Result
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: Types::INTEGER)]
-    #[Groups('api')]
-    private int|null $id;
+    #[ORM\Column]
+    private int|null $id = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private string|null $url;
+    #[ORM\Column(length: 2048)]
+    private string|null $url = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Groups('api')]
-    private string|null $title;
+    #[ORM\Column(length: 2048)]
+    private string|null $title = null;
 
-    #[ORM\Column(type: Types::JSON)]
+    #[ORM\Column]
     private array $data = [];
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private \DateTimeImmutable|null $seenAt;
+    #[ORM\Column(type: Types::GUID)]
+    private string|null $guid = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    private string|null $guid;
+    #[ORM\Column(nullable: true)]
+    private \DateTimeImmutable|null $seenAt = null;
 
-    #[ORM\ManyToOne]
-    #[Groups('api')]
-    private Search|null $search;
+    #[ORM\ManyToOne(inversedBy: 'results')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Search|null $search = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Groups('api')]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     private \DateTimeImmutable|null $createdAt = null;
 
     public function __construct()
@@ -58,7 +55,7 @@ class Result
 
     public function setUrl(
         string $url
-    ): self {
+    ): static {
         $this->url = $url;
 
         return $this;
@@ -71,34 +68,21 @@ class Result
 
     public function setTitle(
         string $title
-    ): self {
+    ): static {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getData(): array|null
+    public function getData(): array
     {
         return $this->data;
     }
 
     public function setData(
         array $data
-    ): self {
+    ): static {
         $this->data = $data;
-
-        return $this;
-    }
-
-    public function getSeenAt(): \DateTimeImmutable|null
-    {
-        return $this->seenAt;
-    }
-
-    public function setSeenAt(
-        \DateTimeImmutable|null $seenAt
-    ): self {
-        $this->seenAt = $seenAt;
 
         return $this;
     }
@@ -110,8 +94,21 @@ class Result
 
     public function setGuid(
         string $guid
-    ): self {
+    ): static {
         $this->guid = $guid;
+
+        return $this;
+    }
+
+    public function getSeenAt(): \DateTimeImmutable|null
+    {
+        return $this->seenAt;
+    }
+
+    public function setSeenAt(
+        \DateTimeImmutable|null $seenAt
+    ): static {
+        $this->seenAt = $seenAt;
 
         return $this;
     }
@@ -123,7 +120,7 @@ class Result
 
     public function setSearch(
         Search|null $search
-    ): self {
+    ): static {
         $this->search = $search;
 
         return $this;

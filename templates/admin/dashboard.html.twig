@@ -1,11 +1,25 @@
-{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
-{% extends '@EasyAdmin/page/content.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
 
 {% block main %}
-    o/
+    <h3>Control wallpapers</h3>
 
-    <div>
-        If a mascot group called `offline` is specified it will not be displayed in lists, but instead show up when the website
-        cannot be loaded from normal online state.
-    </div>
+    {{ form_start(wallpaperForm) }}
+        <div class="row">
+            <div class="field-association form-group">
+                <div class="col-12">
+                    {{ form_label(wallpaperForm.tags) }}
+                </div>
+                <div class="col-12">
+                    {{ form_widget(wallpaperForm.tags) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {{ form_widget(wallpaperForm.submit) }}
+            </div>
+        </div>
+    {{ form_end(wallpaperForm) }}
+
+    {{ parent() }}
 {% endblock %}

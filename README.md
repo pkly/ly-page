@@ -1,10 +1,11 @@
-# ly-page
+# Homepage RSS thing
 
-This project is a simple Symfony 7 homepage that'll allow you to see your rss feeds, show a mascot, and display links to your most viewed websites.
-Mostly a simple example of a website that could be ran on a home network (which I do for my convinence).
+## Built with symfony
 
-Also a PWA, to allow you to "take it anywhere", granted the rss feeds will not update and you'll be stuck with the same mascot.
+This is just a personal project. You can use it if you'd like. Allows you to specify RSS sources, mascots, wallpapers.
 
-Docker images are accessible and easily upgradeable.
+RSS sources will be searched through occasionally (at most every hour, if found, items will be delayed by 15 minutes, no searches will occur once results are found for a day).
 
-See /docker/build/docker-compose.yml for an example of how to run this on your own network.
+Mascots display on the page, you can select which ones you'd like using tags.
+
+Wallpapers are a backend things that I just use to change what wallpapers display on my TV in a screensaver.

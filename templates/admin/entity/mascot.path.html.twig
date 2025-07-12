@@ -1,0 +1,7 @@
+{% import 'macro.html.twig' as macro %}
+
+{% set instance = entity.instance %}
+
+<div class="admin-mascot">
+    {{ macro.mascot(instance.path, instance.ext) }}
+</div>

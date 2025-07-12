@@ -1,0 +1,102 @@
+{% import 'macro.html.twig' as macro %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <link rel="icon" href="{{ asset('assets/img/img.png') }}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>{% block title %}Home ~{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-reboot.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
+            <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}" />
+        {% endblock %}
+
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body class="py-4 px-md-4">
+        <div class="container-fluid d-flex flex-column h-100">
+            <header class="mb-4 header-main">{{ header }}</header>
+            {% if alert|length %}
+                <div class="alert alert-info">
+                    {{ alert }}
+                </div>
+            {% endif %}
+            <div class="row flex-grow-1">
+                <div class="col-12 col-md-6">
+                    {% if rssResults is not empty %}
+                        <div class="rss-block mb-3 pb-3 px-3 border-bottom border-success-subtle">
+                            <header class="mb-3">
+                                <div class="row">
+                                    <div class="col-9">
+                                        RSS Results
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <a href="{{ path('front.set_all_as_seen') }}" class="btn btn-sm btn-outline-secondary">
+                                            Seen all
+                                        </a>
+                                    </div>
+                                </div>
+                            </header>
+                            <div>
+                                {% for result in rssResults %}
+                                    <a href="{{ path('front.rss_result_start', {rss: result.id}) }}" class="d-block btn btn-outline-secondary rss-link">
+                                        {{ result.title }}
+                                        <small>
+                                            {{ result.createdAt|date('d-m-Y H:i:s') }} |
+                                            {{ result.search.query }} - {{ result.search.source.name }}
+                                        </small>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% for block in blocks %}
+                        <div class="header-block mb-3 pb-3 px-3 border-bottom border-info-subtle link-block">
+                            <header class="mb-3">
+                                {{ block.title }}
+                                <small>{{ block.description }}</small>
+                            </header>
+                            <div>
+                                {% for link in block.links %}
+                                    <a href="{{ link.url|raw }}" class="btn btn-sm btn-outline-info">
+                                        {{ link.title }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-12 col-md-6 mascot-container">
+                    {% if mascot %}
+                        {{ macro.mascot(mascot.path, mascot.ext) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <footer>
+            {% for link in footerLinks %}
+                <a href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
+
+            <select id="mascot-group-selector" data-redirect-url="{{ path('front.mascot_set', {group: 'groupPlaceholder'}) }}">
+                {% for group in mascotGroups %}
+                    <option value="{{ group.id }}" {% if currentMascotGroup != null and currentMascotGroup.id == group.id %}selected{% endif %}>{{ group.title }}</option>
+                {% endfor %}
+            </select>
+        </footer>
+    </body>
+    <script type="text/javascript">
+        document.getElementById('mascot-group-selector').addEventListener('change', function (event) {
+            let element = document.getElementById('mascot-group-selector');
+            let url = element.getAttribute('data-redirect-url');
+            let value = element.options[element.selectedIndex].value;
+
+            window.location.href = url.replace('groupPlaceholder', value);
+        });
+    </script>
+</html>

@@ -1,1 +1,1 @@
-0 18 * * * /var/www/bin/console app:cron-search
+* * * * * /var/www/bin/console messenger:consume scheduler_default --limit=1
