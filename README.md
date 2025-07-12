@@ -9,3 +9,4 @@ RSS sources will be searched through occasionally (at most every hour, if found,
 Mascots display on the page, you can select which ones you'd like using tags.
 
 Wallpapers are a backend things that I just use to change what wallpapers display on my TV in a screensaver.
+
