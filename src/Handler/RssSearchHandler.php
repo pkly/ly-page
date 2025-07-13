@@ -7,9 +7,7 @@ namespace App\Handler;
 use App\Message\Rss\GenericSearchNotification;
 use App\Repository\Rss\SearchRepository;
 use App\Rss\Refresher;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RssSearchHandler
 {

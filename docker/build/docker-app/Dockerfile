@@ -1,6 +1,6 @@
 FROM ghcr.io/pkly/ly-page/lypage-php-fpm:latest
 
-RUN apk update && apk add nginx bash
+RUN apk update && apk add nginx bash nano
 
 WORKDIR /var/www
 

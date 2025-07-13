@@ -17,8 +17,9 @@ final class Version20250712160737 extends AbstractMigration
         return 'Initial migration for lypage-v3';
     }
 
-    public function up(Schema $schema): void
-    {
+    public function up(
+        Schema $schema
+    ): void {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE block_group (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE block_link (id INT AUTO_INCREMENT NOT NULL, block_id INT NOT NULL, url VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, INDEX IDX_F0C2CB8AE9ED820C (block_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -47,8 +48,9 @@ final class Version20250712160737 extends AbstractMigration
         $this->addSql('ALTER TABLE wallpaper_tag ADD CONSTRAINT FK_5E1613C0BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE');
     }
 
-    public function down(Schema $schema): void
-    {
+    public function down(
+        Schema $schema
+    ): void {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE block_link DROP FOREIGN KEY FK_F0C2CB8AE9ED820C');
         $this->addSql('ALTER TABLE mascot_tag DROP FOREIGN KEY FK_8E5C38BF62BBAE4F');
