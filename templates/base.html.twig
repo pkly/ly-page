@@ -72,8 +72,8 @@
                     {% endfor %}
                 </div>
                 <div class="col-12 col-md-6 mascot-container">
-                    {% if mascot %}
-                        {{ macro.mascot(mascot.path, mascot.ext) }}
+                    {% if mascot != null %}
+                        {{ macro.mascot(mascot[0], mascot[1]) }}
                     {% endif %}
                 </div>
             </div>
