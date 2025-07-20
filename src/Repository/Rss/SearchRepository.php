@@ -34,7 +34,9 @@ class SearchRepository extends ServiceEntityRepository
                 ),
                 $qb->expr()->andX(
                     $qb->expr()->isNotNull('s.lastSearchedAt'),
-                    $qb->expr()->lte('DATE_ADD(s.lastFoundAt, 1, \'DAY\')', ':now')
+                    $qb->expr()->isNotNull('s.lastFoundAt'),
+                    $qb->expr()->lte('DATE_ADD(s.lastFoundAt, 3, \'DAY\')', ':now'),
+                    $qb->expr()->lte('DATE_ADD(s.lastSearchedAt, 3, \'HOUR\')', ':now'),
                 )
             )
         );

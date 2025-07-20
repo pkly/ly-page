@@ -6,6 +6,12 @@ framework:
     session:
         cookie_lifetime: 94608000
 
+    http_client:
+        default_options:
+            headers:
+                'User-Agent': 'LyPage-v3/please-dont-block-me'
+                'X-Contact': 'github.com/pkly/ly-page'
+
     #esi: true
     #fragments: true
 
