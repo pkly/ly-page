@@ -80,9 +80,9 @@ class WallpaperCrudController extends AbstractCrudController
         }
 
         if (null === $this->newImagePath) {
-            $this->addFlash('warning', 'No new mascot to add');
+            $this->addFlash('warning', 'No new wallpaper to add');
 
-            return $this->redirectToRoute('admin_mascot_index');
+            return $this->redirectToRoute('admin_wallpaper_index');
         }
 
         return parent::new($context);

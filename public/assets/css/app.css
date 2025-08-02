@@ -34,8 +34,17 @@ body {
     height: 100vh;
 }
 
-.mascot-container {
-    height: 100%;
+@media (min-width: 768px) {
+    .mascot-container {
+        height: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .mascot-container {
+        padding-top: 30px;
+        padding-bottom: 15px;
+    }
 }
 
 .mascot {
