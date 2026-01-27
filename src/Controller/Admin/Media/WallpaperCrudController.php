@@ -36,7 +36,8 @@ class WallpaperCrudController extends AbstractCrudController
     public function configureCrud(
         Crud $crud
     ): Crud {
-        return $crud->overrideTemplate('crud/new', 'admin/entity/image.add.html.twig');
+        return $crud->overrideTemplate('crud/new', 'admin/entity/image.add.html.twig')
+            ->setDefaultSort(['id' => 'DESC']);
     }
 
     public function configureFields(
