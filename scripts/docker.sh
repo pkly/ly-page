@@ -33,4 +33,4 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
-docker compose -p lypage up
+docker compose -p lypage up --force-recreate
