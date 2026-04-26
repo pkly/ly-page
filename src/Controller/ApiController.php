@@ -31,7 +31,7 @@ class ApiController extends AbstractController
         $link = $this->em->getRepository(ApiLink::class)->findOneBy(['userIdentifier' => $clientIdentifier]);
 
         if (null === $link) {
-            if (null === ($group = ($this->em->getRepository(MascotGroup::class)->findOneBy([])[0] ?? null))) {
+            if (null === ($group = $this->em->getRepository(MascotGroup::class)->findOneBy([]))) {
                 return new Response(status: 412);
             }
 
