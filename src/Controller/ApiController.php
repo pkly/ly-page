@@ -49,7 +49,7 @@ class ApiController extends AbstractController
     #[Route('/mascot/set-group/{clientIdentifier}/{group}', methods: ['POST'])]
     public function setGroup(
         string $clientIdentifier,
-        #[MapEntity(mapping: ['id' => 'group'])] MascotGroup $group
+        #[MapEntity(mapping: ['group' => 'id'])] MascotGroup $group
     ): Response {
         $link = $this->em->getRepository(ApiLink::class)->findOneBy(['userIdentifier' => $clientIdentifier])
             ?? new ApiLink()
